@@ -2,6 +2,9 @@ package main.java.utils;
 
 import java.io.*;
 import java.util.ArrayList;
+//import java.io.BufferedWriter;
+//import java.io.FileWriter;
+//import java.io.IOException;
 
 public class FileHandler {
 
@@ -21,5 +24,14 @@ public class FileHandler {
             data = (ArrayList<Object>) ois.readObject();
         }
         return data;
+    }
+
+    public static void writeLog(String fileName, String content) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
+            writer.write(content);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
