@@ -3,6 +3,7 @@ package main.java.ui;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import main.java.utils.UserDatabase;
 
 public class LoginPanel extends JPanel {
     private JLabel userLabel;
@@ -40,7 +41,8 @@ public class LoginPanel extends JPanel {
         String password = new String(passwordText.getPassword());
 
         // For now, we'll use a simple check. Later, this can be replaced with actual user/admin checks.
-        if ("admin".equals(username) && "pass".equals(password)) {
+        //if ("admin".equals(username) && "pass".equals(password)) {
+        if (UserDatabase.authenticate(username, password)) {
             JOptionPane.showMessageDialog(this, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
             // Switch to the dashboard

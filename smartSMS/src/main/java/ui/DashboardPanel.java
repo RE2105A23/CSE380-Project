@@ -1,11 +1,16 @@
 package main.java.ui;
 
 import main.java.models.Server;
+import main.java.utils.FileHandler;
+import main.java.utils.SMSHandler;
+
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
+//import javax.swing.Timer;
+
 
 public class DashboardPanel extends JPanel {
     private JLabel welcomeLabel;
@@ -27,13 +32,23 @@ public class DashboardPanel extends JPanel {
         servers.add(new Server("Server3"));
 
         // Table to display server statuses
-        String[] columnNames = {"Server Name", "CPU Usage", "Memory Usage", "Network Latency"};
+        String[] columnNames = {"Server Name", "CPU Usage", "Memory Usage", "Network Latency", "Actions"};
         tableModel = new DefaultTableModel(columnNames, 0);
         serverTable = new JTable(tableModel);
         add(new JScrollPane(serverTable), BorderLayout.CENTER);
 
         // Simulate server monitoring
         simulateServerMonitoring();
+
+        // Set up a timer to refresh server metrics every 5 seconds
+        Timer timer = new Timer(5000, e -> {
+            // Clear the existing table rows
+            tableModel.setRowCount(0);
+
+            // Update server metrics and check for alerts
+            simulateServerMonitoring();
+        });
+        timer.start();
     }
 
     private void simulateServerMonitoring() {
@@ -46,10 +61,21 @@ public class DashboardPanel extends JPanel {
                     server.getNetworkLatency()
             };
             tableModel.addRow(rowData);
+
+            // Log server metrics
+            FileHandler.writeLog("server_metrics.txt", server.getName() + ": CPU=" + server.getCpuUsage() + ", Memory=" + server.getMemoryUsage() + ", Latency=" + server.getNetworkLatency());
+
+            JButton restartButton = new JButton("Restart");
+            restartButton.addActionListener(e -> restartServer(server));
+            tableModel.addRow(new Object[]{server.getName(), server.getCpuUsage(), server.getMemoryUsage(), server.getNetworkLatency(), restartButton});
         }
         checkServerThresholds();
-        // Log server metrics
-        FileHandler.writeLog("server_metrics.txt", server.getName() + ": CPU=" + server.getCpuUsage() + ", Memory=" + server.getMemoryUsage() + ", Latency=" + server.getNetworkLatency());
+    }
+
+    private void restartServer(Server server) {
+        server.restart();  // We'll implement this method in the Server class next
+        // Log the restart action
+        FileHandler.writeLog("server_actions.txt", "Restarted " + server.getName());
     }
 
     private void checkServerThresholds() {
@@ -57,13 +83,10 @@ public class DashboardPanel extends JPanel {
             String message = server.checkThresholds();
             if (!message.isEmpty()) {
                 // Simulate sending SMS to users
-                JOptionPane.showMessageDialog(this, message, "Server Alert", JOptionPane.WARNING_MESSAGE);
+                SMSHandler.sendSMS("123-456-7890", message);
+                // Log the alert
+                FileHandler.writeLog("server_alerts.txt", server.getName() + ": " + message);
             }
         }
-        // Log alerts
-        if (!message.isEmpty()) {
-            FileHandler.writeLog("server_alerts.txt", server.getName() + ": " + message);
-        }
     }
-
 }

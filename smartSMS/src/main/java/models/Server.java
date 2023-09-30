@@ -48,5 +48,15 @@ public class Server {
         return message.toString();
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public void restart() {
+        this.cpuUsage = 0;
+        this.memoryUsage = 0;
+        this.networkLatency = 0;
+    }
+
 }
 
