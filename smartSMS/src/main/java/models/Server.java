@@ -6,8 +6,11 @@ public class Server {
     private double memoryUsage;
     private double networkLatency;
 
-    public Server(String name) {
+    public Server(String name, int cpuUsage, int memoryUsage, int networkLatency) {
         this.name = name;
+        this.cpuUsage = cpuUsage;
+        this.memoryUsage = memoryUsage;
+        this.networkLatency = networkLatency;
     }
 
     public void simulateMonitoring() {

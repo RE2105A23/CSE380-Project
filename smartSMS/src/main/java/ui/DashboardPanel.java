@@ -27,9 +27,9 @@ public class DashboardPanel extends JPanel {
 
         // Initialize Server List
         servers = new ArrayList<>();
-        servers.add(new Server("Server1"));
-        servers.add(new Server("Server2"));
-        servers.add(new Server("Server3"));
+        servers.add(new Server("Server1", 20, 50, 100));
+        servers.add(new Server("Server2", 20, 50, 100));
+        servers.add(new Server("Server3", 20, 50, 100));
 
         // Table to display server statuses
         String[] columnNames = {"Server Name", "CPU Usage", "Memory Usage", "Network Latency", "Actions"};

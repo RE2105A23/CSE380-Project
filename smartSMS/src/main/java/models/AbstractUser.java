@@ -40,4 +40,9 @@ public abstract class AbstractUser {
     // Abstract methods for login and logout
     public abstract void login();
     public abstract void logout();
+
+    public AbstractUser() {
+        // Initialize fields or leave it empty
+    }
+
 }
