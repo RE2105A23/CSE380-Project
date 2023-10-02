@@ -1,114 +1,395 @@
+Server1: Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. Warning: Network latency is high. 
+Server3: Warning: Memory usage is high. 
+Server1: Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: Memory usage is high. 
+Server2: Warning: Memory usage is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: Network latency is high. 
 Server1: Warning: CPU usage is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. 
+Server3: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. Warning: Memory usage is high. Warning: Network latency is high. 
+Server3: Warning: CPU usage is high. Warning: Network latency is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. Warning: Memory usage is high. 
+Server1: Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. Warning: Network latency is high. 
+Server3: Warning: CPU usage is high. 
+Server1: Warning: Network latency is high. 
+Server2: Warning: Memory usage is high. 
+Server1: Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: Network latency is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: Network latency is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. 
+Server2: Warning: Memory usage is high. Warning: Network latency is high. 
+Server1: Warning: Network latency is high. 
+Server3: Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. 
+Server1: Warning: CPU usage is high. 
+Server1: Warning: CPU usage is high. 
+Server3: Warning: Memory usage is high. 
+Server2: Warning: Network latency is high. 
 Server3: Warning: Memory usage is high. Warning: Network latency is high. 
 Server1: Warning: CPU usage is high. 
-Server3: Warning: CPU usage is high. 
-Server2: Warning: CPU usage is high. 
 Server2: Warning: Memory usage is high. 
-Server2: Warning: Network latency is high. 
-Server3: Warning: CPU usage is high. 
-Server1: Warning: CPU usage is high. 
+Server3: Warning: Network latency is high. 
 Server3: Warning: Memory usage is high. 
-Server1: Warning: Network latency is high. 
-Server3: Warning: CPU usage is high. 
-Server2: Warning: Memory usage is high. Warning: Network latency is high. 
-Server3: Warning: CPU usage is high. Warning: Network latency is high. 
-Server1: Warning: CPU usage is high. 
-Server3: Warning: CPU usage is high. 
-Server1: Warning: Memory usage is high. 
-Server2: Warning: CPU usage is high. 
-Server3: Warning: CPU usage is high. Warning: Memory usage is high. 
-Server3: Warning: Memory usage is high. 
-Server2: Warning: Network latency is high. 
-Server3: Warning: Memory usage is high. 
-Server1: Warning: Network latency is high. 
-Server1: Warning: Memory usage is high. 
-Server1: Warning: Memory usage is high. 
-Server1: Warning: Network latency is high. 
-Server1: Warning: Memory usage is high. 
 Server1: Warning: CPU usage is high. Warning: Memory usage is high. 
-Server3: Warning: CPU usage is high. Warning: Memory usage is high. Warning: Network latency is high. 
+Server3: Warning: CPU usage is high. 
 Server2: Warning: Memory usage is high. 
-Server1: Warning: Memory usage is high. 
-Server3: Warning: Memory usage is high. 
+Server3: Warning: Network latency is high. 
+Server3: Warning: Network latency is high. 
+Server2: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. Warning: Memory usage is high. 
+Server3: Warning: CPU usage is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: Memory usage is high. Warning: Network latency is high. 
 Server1: Warning: Network latency is high. 
-Server1: Warning: Memory usage is high. Warning: Network latency is high. 
+Server2: Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. 
+Server2: Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. 
+Server1: Warning: Network latency is high. 
+Server2: Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. 
+Server3: Warning: CPU usage is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: Memory usage is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: Memory usage is high. 
+Server2: Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. 
+Server1: Warning: Network latency is high. 
 Server2: Warning: Network latency is high. 
 Server1: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. 
+Server2: Warning: CPU usage is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: CPU usage is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. 
+Server2: Warning: CPU usage is high. 
+Server1: Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. 
+Server3: Warning: CPU usage is high. 
+Server3: Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. Warning: Network latency is high. 
 Server3: Warning: Network latency is high. 
 Server2: Warning: CPU usage is high. 
+Server3: Warning: Network latency is high. 
+Server3: Warning: CPU usage is high. 
+Server2: Warning: Network latency is high. 
+Server3: Warning: Network latency is high. 
+Server2: Warning: Network latency is high. 
+Server3: Warning: CPU usage is high. 
+Server2: Warning: Network latency is high. 
+Server3: Warning: CPU usage is high. 
+Server1: Warning: CPU usage is high. 
+Server3: Warning: CPU usage is high. 
+Server2: Warning: Memory usage is high. 
+Server1: Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. 
 Server1: Warning: Memory usage is high. 
 Server1: Warning: CPU usage is high. 
+Server2: Warning: Network latency is high. 
+Server3: Warning: Memory usage is high. Warning: Network latency is high. 
+Server2: Warning: Network latency is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. Warning: Memory usage is high. 
+Server2: Warning: Memory usage is high. 
+Server1: Warning: Memory usage is high. 
+Server1: Warning: Memory usage is high. 
+Server2: Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. 
+Server3: Warning: CPU usage is high. Warning: Memory usage is high. 
+Server1: Warning: Memory usage is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: CPU usage is high. 
+Server1: Warning: Memory usage is high. 
+Server3: Warning: CPU usage is high. Warning: Memory usage is high. 
 Server2: Warning: CPU usage is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: Memory usage is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: Memory usage is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: CPU usage is high. Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. 
+Server1: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. 
+Server2: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. 
+Server1: Warning: Network latency is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: Memory usage is high. Warning: Network latency is high. 
+Server2: Warning: Memory usage is high. 
+Server2: Warning: Network latency is high. 
+Server3: Warning: Network latency is high. 
+Server3: Warning: Memory usage is high. 
+Server3: Warning: CPU usage is high. 
+Server2: Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. 
+Server1: Warning: Memory usage is high. Warning: Network latency is high. 
+Server3: Warning: CPU usage is high. 
+Server2: Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: Network latency is high. 
+Server2: Warning: Network latency is high. 
+Server1: Warning: Network latency is high. 
+Server3: Warning: Memory usage is high. Warning: Network latency is high. 
+Server1: Warning: Memory usage is high. 
+Server3: Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. 
+Server2: Warning: CPU usage is high. 
+Server1: Warning: Memory usage is high. 
+Server1: Warning: Network latency is high. 
+Server1: Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. 
+Server1: Warning: Network latency is high. 
+Server2: Warning: Network latency is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. 
+Server2: Warning: CPU usage is high. Warning: Memory usage is high. Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: CPU usage is high. 
+Server1: Warning: Network latency is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: CPU usage is high. 
+Server3: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. 
+Server1: Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. 
+Server1: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. 
+Server1: Warning: Memory usage is high. 
+Server3: Warning: CPU usage is high. Warning: Network latency is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: Memory usage is high. Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: CPU usage is high. 
+Server1: Warning: CPU usage is high. 
+Server2: Warning: Memory usage is high. 
 Server1: Warning: Memory usage is high. 
 Server2: Warning: CPU usage is high. Warning: Network latency is high. 
-Server3: Warning: CPU usage is high. Warning: Memory usage is high. 
+Server2: Warning: Network latency is high. 
+Server1: Warning: Memory usage is high. 
 Server3: Warning: Memory usage is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. 
+Server1: Warning: CPU usage is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: Memory usage is high. 
+Server2: Warning: Memory usage is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. 
+Server1: Warning: Network latency is high. 
+Server1: Warning: Network latency is high. 
+Server3: Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. 
+Server2: Warning: CPU usage is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: Network latency is high. 
+Server3: Warning: CPU usage is high. 
+Server2: Warning: Memory usage is high. 
+Server1: Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. Warning: Memory usage is high. 
+Server3: Warning: CPU usage is high. 
+Server1: Warning: CPU usage is high. Warning: Network latency is high. 
+Server1: Warning: Memory usage is high. 
+Server3: Warning: Memory usage is high. 
+Server2: Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. 
+Server3: Warning: Memory usage is high. Warning: Network latency is high. 
+Server1: Warning: Memory usage is high. 
+Server1: Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: CPU usage is high. 
+Server2: Warning: Network latency is high. 
+Server2: Warning: Network latency is high. 
+Server2: Warning: Memory usage is high. 
+Server1: Warning: Memory usage is high. 
+Server3: Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: Memory usage is high. 
+Server3: Warning: Network latency is high. 
+Server2: Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: Network latency is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: Network latency is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. Warning: Memory usage is high. 
+Server3: Warning: CPU usage is high. 
+Server3: Warning: Memory usage is high. 
+Server3: Warning: Network latency is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: Network latency is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. 
+Server1: Warning: CPU usage is high. Warning: Memory usage is high. 
 Server2: Warning: Network latency is high. 
 Server1: Warning: CPU usage is high. 
 Server2: Warning: CPU usage is high. 
 Server1: Warning: CPU usage is high. 
-Server2: Warning: Network latency is high. 
-Server3: Warning: Network latency is high. 
-Server1: Warning: Memory usage is high. 
-Server2: Warning: Network latency is high. 
+Server3: Warning: Memory usage is high. 
 Server1: Warning: CPU usage is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: Memory usage is high. 
+Server2: Warning: Network latency is high. 
+Server1: Warning: Memory usage is high. Warning: Network latency is high. 
+Server2: Warning: Memory usage is high. 
+Server1: Warning: Memory usage is high. 
+Server1: Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: Memory usage is high. 
+Server3: Warning: Network latency is high. 
+Server2: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. 
+Server1: Warning: Network latency is high. 
+Server3: Warning: Memory usage is high. 
+Server1: Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: Memory usage is high. 
+Server3: Warning: Memory usage is high. 
+Server3: Warning: Memory usage is high. 
+Server1: Warning: Network latency is high. 
+Server2: Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. 
+Server1: Warning: Memory usage is high. 
+Server3: Warning: CPU usage is high. 
+Server1: Warning: CPU usage is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. 
+Server3: Warning: Network latency is high. 
 Server2: Warning: Network latency is high. 
 Server3: Warning: Memory usage is high. 
+Server2: Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. 
+Server1: Warning: Network latency is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: Memory usage is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: CPU usage is high. 
+Server3: Warning: Memory usage is high. 
+Server3: Warning: CPU usage is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: CPU usage is high. 
+Server1: Warning: Network latency is high. 
+Server3: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. 
+Server3: Warning: CPU usage is high. 
+Server1: Warning: CPU usage is high. 
+Server1: Warning: CPU usage is high. 
+Server3: Warning: CPU usage is high. 
+Server1: Warning: CPU usage is high. 
+Server3: Warning: Network latency is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: CPU usage is high. 
+Server1: Warning: CPU usage is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. 
+Server1: Warning: CPU usage is high. Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. 
+Server1: Warning: CPU usage is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: CPU usage is high. Warning: Memory usage is high. 
+Server3: Warning: Memory usage is high. 
+Server2: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. Warning: Memory usage is high. 
+Server2: Warning: Network latency is high. 
+Server3: Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. 
+Server1: Warning: Memory usage is high. Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. Warning: Network latency is high. 
+Server1: Warning: Network latency is high. 
+Server3: Warning: CPU usage is high. Warning: Network latency is high. 
+Server3: Warning: CPU usage is high. 
+Server1: Warning: CPU usage is high. Warning: Memory usage is high. 
+Server1: Warning: Network latency is high. 
+Server3: Warning: CPU usage is high. Warning: Memory usage is high. Warning: Network latency is high. 
+Server2: Warning: Memory usage is high. 
+Server3: Warning: Network latency is high. 
+Server2: Warning: Network latency is high. 
+Server1: Warning: Network latency is high. 
+Server2: Warning: Network latency is high. 
+Server1: Warning: Memory usage is high. 
+Server1: Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. 
+Server3: Warning: Memory usage is high. 
+Server1: Warning: Memory usage is high. 
+Server2: Warning: CPU usage is high. 
+Server2: Warning: Network latency is high. 
+Server3: Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. 
+Server1: Warning: Memory usage is high. Warning: Network latency is high. 
 Server1: Warning: Network latency is high. 
 Server1: Warning: Memory usage is high. Warning: Network latency is high. 
-Server3: Warning: Memory usage is high. 
-Server1: Warning: CPU usage is high. 
-Server3: Warning: CPU usage is high. 
+Server2: Warning: Memory usage is high. 
+Server1: Warning: Memory usage is high. 
 Server1: Warning: Network latency is high. 
 Server2: Warning: Memory usage is high. 
-Server1: Warning: CPU usage is high. Warning: Memory usage is high. 
-Server3: Warning: CPU usage is high. Warning: Memory usage is high. 
+Server1: Warning: Memory usage is high. Warning: Network latency is high. 
+Server3: Warning: Network latency is high. 
+Server1: Warning: Memory usage is high. 
+Server3: Warning: Memory usage is high. 
+Server3: Warning: CPU usage is high. 
+Server1: Warning: Network latency is high. 
+Server1: Warning: Memory usage is high. 
+Server1: Warning: Network latency is high. 
+Server2: Warning: CPU usage is high. Warning: Memory usage is high. 
+Server2: Warning: Memory usage is high. 
+Server1: Warning: CPU usage is high. Warning: Memory usage is high. Warning: Network latency is high. 
+Server1: Warning: Network latency is high. 
 Server2: Warning: CPU usage is high. 
+Server1: Warning: Memory usage is high. 
 Server2: Warning: Memory usage is high. Warning: Network latency is high. 
+Server1: Warning: Memory usage is high. 
+Server2: Warning: Memory usage is high. 
+Server1: Warning: Memory usage is high. 
 Server3: Warning: Network latency is high. 
-Server1: Warning: CPU usage is high. 
-Server3: Warning: CPU usage is high. 
-Server1: Warning: CPU usage is high. Warning: Memory usage is high. 
-Server3: Warning: Memory usage is high. 
 Server2: Warning: Network latency is high. 
 Server3: Warning: Network latency is high. 
-Server1: Warning: CPU usage is high. Warning: Network latency is high. 
-Server2: Warning: Memory usage is high. 
 Server3: Warning: Network latency is high. 
+Server1: Warning: CPU usage is high. 
+Server2: Warning: Network latency is high. 
+Server3: Warning: CPU usage is high. 
+Server3: Warning: CPU usage is high. 
 Server1: Warning: Memory usage is high. 
 Server1: Warning: Network latency is high. 
 Server2: Warning: CPU usage is high. 
 Server1: Warning: CPU usage is high. 
-Server3: Warning: CPU usage is high. Warning: Network latency is high. 
 Server3: Warning: Network latency is high. 
-Server2: Warning: Network latency is high. 
-Server1: Warning: Memory usage is high. 
-Server2: Warning: Network latency is high. 
-Server1: Warning: CPU usage is high. 
-Server2: Warning: Network latency is high. 
-Server1: Warning: CPU usage is high. 
-Server2: Warning: Memory usage is high. 
-Server3: Warning: CPU usage is high. 
-Server1: Warning: CPU usage is high. 
-Server2: Warning: CPU usage is high. 
-Server3: Warning: CPU usage is high. 
-Server2: Warning: Memory usage is high. 
-Server1: Warning: CPU usage is high. 
-Server2: Warning: CPU usage is high. 
-Server1: Warning: Memory usage is high. 
-Server2: Warning: Memory usage is high. 
-Server3: Warning: CPU usage is high. 
-Server1: Warning: CPU usage is high. Warning: Network latency is high. 
-Server1: Warning: CPU usage is high. Warning: Network latency is high. 
-Server1: Warning: Network latency is high. 
-Server2: Warning: CPU usage is high. 
-Server2: Warning: Network latency is high. 
-Server3: Warning: CPU usage is high. Warning: Network latency is high. 
-Server2: Warning: Memory usage is high. 
-Server1: Warning: Network latency is high. 
-Server1: Warning: CPU usage is high. 
-Server2: Warning: Memory usage is high. 
-Server2: Warning: Network latency is high. 
-Server3: Warning: Memory usage is high. 
-Server2: Warning: Network latency is high. 
 Server1: Warning: Network latency is high. 

@@ -1,6 +1,7 @@
 package main.java.models;
 
 import main.java.exceptions.ServerException;
+import main.java.utils.FileHandler;
 
 public class Server {
     private String name;
@@ -63,9 +64,15 @@ public class Server {
     }
 
     public void restart() {
-        this.cpuUsage = 0;
-        this.memoryUsage = 0;
-        this.networkLatency = 0;
+        //System.out.println("Server is restarting...");  // Debugging line
+        this.cpuUsage = 0.0;
+        this.memoryUsage = 0.0;
+        this.networkLatency = 0.0;
+
+        // Log the restart action
+        //System.out.println("Server restarted. Metrics set to 0.0");
+        System.out.println("Server " + this.getName() + " metrics after restart: CPU=" + this.cpuUsage + ", Memory=" + this.memoryUsage + ", Latency=" + this.networkLatency);
+        //FileHandler.writeLog("server_actions.txt", "Restarted " + this.getName());
     }
 }
 

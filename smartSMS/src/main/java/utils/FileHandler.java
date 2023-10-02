@@ -2,9 +2,10 @@ package main.java.utils;
 
 import java.io.*;
 import java.util.ArrayList;
-//import java.io.BufferedWriter;
-//import java.io.FileWriter;
-//import java.io.IOException;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class FileHandler {
 
@@ -26,11 +27,23 @@ public class FileHandler {
         return data;
     }
 
+    /*
     public static void writeLog(String fileName, String content) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
             writer.write(content);
             writer.newLine();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    */
+    public static void writeLog(String fileName, String content) {
+        try (FileWriter fw = new FileWriter(fileName, true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
+            out.println(content);
+        } catch (IOException e) {
+            // Handle exception
             e.printStackTrace();
         }
     }

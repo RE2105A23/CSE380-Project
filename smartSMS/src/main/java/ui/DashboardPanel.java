@@ -8,7 +8,10 @@ import main.java.utils.SMSHandler;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.event.TableModelEvent;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class DashboardPanel extends JPanel implements ServerRestarter {
@@ -55,35 +58,58 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
     }
 
     private void simulateServerMonitoring() {
+        //System.out.println("Simulating server monitoring. Metrics updated.");
         // Clear the existing table rows
         tableModel.setRowCount(0);
 
         for (Server server : servers) {
             server.simulateMonitoring();
 
+            // Create a new JButton for each row
             JButton restartButton = new JButton("Restart");
-            restartButton.addActionListener(e -> restartServer(server));
+            restartButton.setActionCommand("Restart_" + server.getName());  // Set action command
 
             Object[] rowData = {
                     server.getName(),
-                    server.getCpuUsage(),
-                    server.getMemoryUsage(),
-                    server.getNetworkLatency(),
-                    "Restart"  // Add the button label here
+                    String.format("%.2f", server.getCpuUsage()),
+                    String.format("%.2f", server.getMemoryUsage()),
+                    String.format("%.2f", server.getNetworkLatency()),
+                    restartButton  // Add the button here
             };
 
             tableModel.addRow(rowData);
 
             // Log server metrics
-            FileHandler.writeLog("server_metrics.txt", server.getName() + ": CPU=" + server.getCpuUsage() + ", Memory=" + server.getMemoryUsage() + ", Latency=" + server.getNetworkLatency());
+            FileHandler.writeLog("server_metrics.txt",
+                    String.format("%s: CPU=%.2f, Memory=%.2f, Latency=%.2f",
+                            server.getName(),
+                            server.getCpuUsage(),
+                            server.getMemoryUsage(),
+                            server.getNetworkLatency())
+            );
         }
         checkServerThresholds();
+        // Force the table to refresh
+        tableModel.fireTableDataChanged();
     }
 
     public void restartServer(Server server) {
+        System.out.println("Attempting to restart server: " + server.getName());  // Debugging line
         server.restart();
+        //System.out.println("Server " + server.getName() + " metrics after calling restart: CPU=" + server.getCpuUsage() + ", Memory=" + server.getMemoryUsage() + ", Latency=" + server.getNetworkLatency());
         // Log the restart action
         FileHandler.writeLog("server_actions.txt", "Restarted " + server.getName());
+        // Refresh the table to reflect the changes
+        //simulateServerMonitoring();
+        //tableModel.fireTableDataChanged();  // Explicitly notify that the table data has changed
+
+        // Find the index of the server in the ArrayList
+        int rowIndex = servers.indexOf(server);
+
+        // Update only the specific row in the table model
+        tableModel.setValueAt(String.format("%.2f", server.getCpuUsage()), rowIndex, 1);
+        tableModel.setValueAt(String.format("%.2f", server.getMemoryUsage()), rowIndex, 2);
+        tableModel.setValueAt(String.format("%.2f", server.getNetworkLatency()), rowIndex, 3);
     }
 
     private void checkServerThresholds() {
@@ -107,18 +133,40 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
     }
 
     // Simple Button Editor
-    public class SimpleButtonEditor extends DefaultCellEditor {
+    public class SimpleButtonEditor extends DefaultCellEditor implements ActionListener {
+        private JButton button;
+        private int row;
+        private JTable table;
+
         public SimpleButtonEditor() {
             super(new JCheckBox());
+            button = new JButton("Restart");
         }
 
+        @Override
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            JButton button = new JButton("Restart");
-            button.addActionListener(e -> {
-                // Implement your restart logic here
-                System.out.println("Restart button clicked for row: " + row);
-            });
+            this.row = row;
+            this.table = table;
+
+            // Remove all existing action listeners
+            for (ActionListener al : button.getActionListeners()) {
+                button.removeActionListener(al);
+            }
+
+            // Add the action listener
+            button.addActionListener(this);
+
             return button;
         }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("Restart button clicked for row: " + row);
+            Server server = servers.get(row);
+            restartServer(server);
+            // Stop cell editing to release the button
+            fireEditingStopped();
+        }
     }
+
 }

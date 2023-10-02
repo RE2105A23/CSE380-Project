@@ -1,3 +1,5 @@
+package main.java.main;
+
 import main.java.ui.LoginPanel;
 
 import javax.swing.*;
