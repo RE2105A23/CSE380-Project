@@ -1,5 +1,7 @@
 package main.java.models;
 
+import main.java.exceptions.ServerException;
+
 public class Server {
     private String name;
     private double cpuUsage;
@@ -14,14 +16,19 @@ public class Server {
     }
 
     public void simulateMonitoring() {
-        // Simulate CPU usage
-        this.cpuUsage = Math.random() * 100;
+        try {
+            // existing code
+            // Simulate CPU usage
+            this.cpuUsage = Math.random() * 100;
 
-        // Simulate Memory usage
-        this.memoryUsage = Math.random() * 100;
+            // Simulate Memory usage
+            this.memoryUsage = Math.random() * 100;
 
-        // Simulate Network latency
-        this.networkLatency = Math.random() * 100;
+            // Simulate Network latency
+            this.networkLatency = Math.random() * 100;
+        } catch(RuntimeException e) {
+            throw new ServerException("Error during server monitoring: " + e.getMessage());
+        }
     }
 
     // Getter methods for the metrics
@@ -60,6 +67,5 @@ public class Server {
         this.memoryUsage = 0;
         this.networkLatency = 0;
     }
-
 }
 

@@ -10,24 +10,35 @@ public class User extends AbstractUser {
 
     public User(String name, String password, String role, List<Server> servers) {
         super();
+        if (name == null || password == null || role == null || servers == null) {
+            throw new IllegalArgumentException("Constructor arguments cannot be null");
+        }
         this.name = name;
         this.password = password;
+        this.role = role;
+        this.serverList = servers;
         System.out.println("Constructor password: " + this.password);  // Debug print
-        // Initialize other fields
-        this.serverList = servers;  // Make sure this line exists
     }
 
     public boolean authenticate(String inputPassword) {
+        if (inputPassword == null) {
+            throw new IllegalArgumentException("Password cannot be null");
+        }
         return this.password.equals(inputPassword);
     }
 
-
     // Getters and Setters for serverList
     public List<Server> getServerList() {
+        if (serverList == null) {
+            throw new IllegalStateException("Server list is not initialized");
+        }
         return serverList;
     }
 
     public void setServerList(List<Server> serverList) {
+        if (serverList == null) {
+            throw new IllegalArgumentException("Server list cannot be null");
+        }
         this.serverList = serverList;
     }
 
@@ -46,6 +57,9 @@ public class User extends AbstractUser {
     }
 
     public void requestServerRestart(Server server) {
+        if (server == null) {
+            throw new IllegalArgumentException("Server cannot be null");
+        }
         // Logic to request server restart
     }
 
@@ -56,5 +70,4 @@ public class User extends AbstractUser {
     public String getPassword() {
         return this.password;
     }
-
 }
