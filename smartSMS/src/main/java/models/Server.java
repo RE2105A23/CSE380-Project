@@ -63,6 +63,22 @@ public class Server {
         return this.name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCpuUsage(int cpuUsage) {
+        this.cpuUsage = cpuUsage;
+    }
+
+    public void setMemoryUsage(int memoryUsage) {
+        this.memoryUsage = memoryUsage;
+    }
+
+    public void setNetworkLatency(int networkLatency) {
+        this.networkLatency = networkLatency;
+    }
+
     public void restart() {
         //System.out.println("Server is restarting...");  // Debugging line
         this.cpuUsage = 0.0;

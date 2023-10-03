@@ -21,27 +21,53 @@ public class Admin extends AbstractUser {
 
     @Override
     public void login() {
-        // Implement login logic for admin
+        System.out.println("Admin " + getUsername() + " logged in.");
     }
 
     @Override
     public void logout() {
-        // Implement logout logic for admin
+        System.out.println("Admin " + getUsername() + " logged out.");
     }
 
+    /*
     public void addServer(Server server) {
-        // Logic to add a server
+        managedServers.add(server);
+        System.out.println("Server " + server.getName() + " added.");
     }
 
     public void removeServer(Server server) {
-        // Logic to remove a server
+        managedServers.remove(server);
+        System.out.println("Server " + server.getName() + " removed.");
     }
+    */
 
     public void viewAllServerStatus() {
-        // Logic to view status of all servers
+        for (Server server : managedServers) {
+            System.out.println("Server: " + server.getName() + ", CPU: " + server.getCpuUsage() + ", Memory: " + server.getMemoryUsage() + ", Latency: " + server.getNetworkLatency());
+        }
     }
 
     public void approveRestartRequest(Server server) {
-        // Logic to approve restart request
+        server.restart();
+        System.out.println("Restart request approved for server: " + server.getName());
+    }
+    public void addServer(Server server) {
+        if ("admin".equals(getRole())) {
+            // Logic to add a server
+            managedServers.add(server);
+            System.out.println("Server added: " + server.getName());
+        } else {
+            System.out.println("Insufficient privileges to add server.");
+        }
+    }
+
+    public void removeServer(Server server) {
+        if ("admin".equals(getRole())) {
+            // Logic to remove a server
+            managedServers.remove(server);
+            System.out.println("Server removed: " + server.getName());
+        } else {
+            System.out.println("Insufficient privileges to remove server.");
+        }
     }
 }

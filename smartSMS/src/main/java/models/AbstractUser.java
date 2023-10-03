@@ -41,8 +41,4 @@ public abstract class AbstractUser {
     public abstract void login();
     public abstract void logout();
 
-    public AbstractUser() {
-        // Initialize fields or leave it empty
-    }
-
 }

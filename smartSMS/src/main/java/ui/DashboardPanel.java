@@ -4,6 +4,8 @@ import main.java.models.Server;
 import main.java.models.ServerRestarter;
 import main.java.utils.FileHandler;
 import main.java.utils.SMSHandler;
+import main.java.models.AbstractUser;
+import main.java.ui.ManageServers;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -19,8 +21,17 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
     private JTable serverTable;
     private DefaultTableModel tableModel;
     private ArrayList<Server> servers;
+    private AbstractUser currentUser;
+    //private String role = currentUser.getRole();  // Initialize role from currentUser
+    private JTextField nameField;  // Assuming you have a JTextField for the name
+    private JTextField cpuLimitField;  // And so on for other fields
+    private JTextField memoryLimitField;
+    private JTextField networkLimitField;
 
-    public DashboardPanel() {
+
+    public DashboardPanel(AbstractUser currentUser) {
+        this.currentUser = currentUser;
+        System.out.println("Current User Role: " + currentUser.getRole());
         setLayout(new BorderLayout());
 
         // Welcome Label
@@ -55,6 +66,78 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
             simulateServerMonitoring();
         });
         timer.start();
+
+        if (currentUser != null) {
+            if ("admin".equals(currentUser.getRole())) {
+                initializeAdminDashboard();
+            } else {
+                initializeUserDashboard();
+            }
+        } else {
+            System.out.println("Error: currentUser is null");
+        }
+        // Initialize button for managing servers
+        JButton manageServersButton = new JButton("Manage Servers");
+        manageServersButton.addActionListener(e -> openManageServersPanel());
+
+        /*
+        if ("admin".equals(this.role)) {
+            JButton adminButton = new JButton("Admin Action");
+            adminButton.addActionListener(e -> {
+                // Implement your admin-specific logic here
+                System.out.println("Admin button clicked");
+            });
+            add(adminButton, BorderLayout.SOUTH);
+        }
+        */
+    }
+
+    private void initializeAdminDashboard() {
+        System.out.println("Initializing Admin Dashboard");  // Debugging line
+        JPanel adminPanel = new JPanel(new FlowLayout());  // Create a new JPanel with FlowLayout
+        JButton manageServersButton = new JButton("Manage Servers");
+
+        manageServersButton.addActionListener(e -> openManageServersPanel());
+        /*
+        manageServersButton.addActionListener(e -> {
+            // Open server management panel
+        });
+        */
+
+        JButton manageUsersButton = new JButton("Manage Users");
+        manageUsersButton.addActionListener(e -> {
+            // Open user management panel
+        });
+
+        JButton setThresholdsButton = new JButton("Set Thresholds");
+        setThresholdsButton.addActionListener(e -> {
+            // Open threshold settings panel
+        });
+
+        adminPanel.add(manageServersButton);  // Add the button to the JPanel
+        adminPanel.add(manageUsersButton);    // Add the button to the JPanel
+        adminPanel.add(setThresholdsButton);  // Add the button to the JPanel
+
+        add(adminPanel, BorderLayout.SOUTH);  // Add the JPanel to the SOUTH region
+    }
+
+    private void initializeUserDashboard() {
+        System.out.println("Initializing User Dashboard");  // Debugging line
+        JPanel userPanel = new JPanel(new FlowLayout());  // Create a new JPanel with FlowLayout
+        JButton requestRestartButton = new JButton("Request Server Restart");
+        requestRestartButton.addActionListener(e -> {
+            // Send request to admin
+        });
+
+        JButton subscribeAlertsButton = new JButton("Subscribe to Alerts");
+        subscribeAlertsButton.addActionListener(e -> {
+            // Subscribe to server alerts
+        });
+
+        userPanel.add(requestRestartButton);    // Add the button to the JPanel
+        userPanel.add(subscribeAlertsButton);  // Add the button to the JPanel
+
+        add(userPanel, BorderLayout.SOUTH);  // Add the JPanel to the SOUTH region
     }
 
     private void simulateServerMonitoring() {
@@ -124,6 +207,48 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
         }
     }
 
+    public void addServer() {
+        String newName = nameField.getText();
+        int newCpuLimit = Integer.parseInt(cpuLimitField.getText());
+        int newMemoryLimit = Integer.parseInt(memoryLimitField.getText());
+        int newNetworkLimit = Integer.parseInt(networkLimitField.getText());
+
+        Server newServer = new Server(newName, newCpuLimit, newMemoryLimit, newNetworkLimit);
+        servers.add(newServer);
+        Object[] rowData = {newName, newCpuLimit, newMemoryLimit, newNetworkLimit};
+        tableModel.addRow(rowData);
+        tableModel.fireTableDataChanged(); // Refresh table
+    }
+
+    public void editServer(int selectedRow) {
+        if (selectedRow >= 0 && selectedRow < servers.size()) {
+            String newName = nameField.getText();
+            int newCpuLimit = Integer.parseInt(cpuLimitField.getText());
+            int newMemoryLimit = Integer.parseInt(memoryLimitField.getText());
+            int newNetworkLimit = Integer.parseInt(networkLimitField.getText());
+
+            Server server = servers.get(selectedRow);
+            server.setName(newName);
+            // Update other server details here
+
+            tableModel.setValueAt(newName, selectedRow, 0); // Assuming name is in column 0
+            tableModel.fireTableDataChanged(); // Refresh table
+        } else {
+            JOptionPane.showMessageDialog(null, "Invalid row selected for editing.");
+        }
+    }
+
+    public void removeServer(int selectedRow) {
+        if (selectedRow >= 0 && selectedRow < servers.size()) {
+            servers.remove(selectedRow);
+            tableModel.removeRow(selectedRow);
+            tableModel.fireTableDataChanged(); // Refresh table
+        } else {
+            JOptionPane.showMessageDialog(null, "Invalid row selected for removal.");
+        }
+    }
+
+
     // Simple Button Renderer
     public class SimpleButtonRenderer extends JButton implements TableCellRenderer {
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -168,5 +293,12 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
             fireEditingStopped();
         }
     }
-
+    private void openManageServersPanel() {
+        JFrame manageServersFrame = new JFrame("Manage Servers");
+        ManageServers manageServersPanel = new ManageServers(this.servers); // Pass the servers list
+        manageServersFrame.add(manageServersPanel);
+        manageServersFrame.setSize(1000, 400);
+        manageServersFrame.setVisible(true);
+        manageServersFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
 }

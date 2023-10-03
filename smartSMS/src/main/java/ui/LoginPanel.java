@@ -3,6 +3,9 @@ package main.java.ui;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import main.java.models.AbstractUser;
+import main.java.models.Admin;
+import main.java.models.User;
 import main.java.utils.UserDatabase;
 
 public class LoginPanel extends JPanel {
@@ -40,15 +43,15 @@ public class LoginPanel extends JPanel {
         String username = userText.getText();
         String password = new String(passwordText.getPassword());
 
-        // For now, we'll use a simple check. Later, this can be replaced with actual user/admin checks.
-        //if ("admin".equals(username) && "pass".equals(password)) {
-        if (UserDatabase.authenticate(username, password)) {
+        // Inside handleLogin() method
+        AbstractUser currentUser = UserDatabase.authenticate(username, password);
+        if (currentUser != null) {
             JOptionPane.showMessageDialog(this, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
             // Switch to the dashboard
             JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
             mainFrame.getContentPane().removeAll();
-            mainFrame.add(new DashboardPanel());
+            mainFrame.add(new DashboardPanel(currentUser));  // Pass currentUser here
             mainFrame.revalidate();
             mainFrame.repaint();
         } else {
