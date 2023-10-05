@@ -13,6 +13,7 @@ public class UserDatabase {
     static {
         users.add(new Admin("admin", "123", "admin", null));
         users.add(new User("user", "u123", "user", null));
+		users.add(new Admin("krish", "321", "admin", null));
     }
 
     public static AbstractUser authenticate(String username, String password) {

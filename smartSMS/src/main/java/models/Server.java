@@ -8,13 +8,35 @@ public class Server {
     private double cpuUsage;
     private double memoryUsage;
     private double networkLatency;
+    private int cpuThreshold;
+    private int memoryThreshold;
+    private int networkThreshold;
 
-    public Server(String name, int cpuUsage, int memoryUsage, int networkLatency) {
+    public Server(String name, int cpuThreshold, int memoryThreshold, int networkThreshold) {
         this.name = name;
         this.cpuUsage = cpuUsage;
         this.memoryUsage = memoryUsage;
         this.networkLatency = networkLatency;
+        // Initialize the thresholds
+        this.cpuThreshold = cpuThreshold;
+        this.memoryThreshold = memoryThreshold;
+        this.networkThreshold = networkThreshold;
     }
+
+
+    // Added getter methods for the thresholds
+    public int getCpuThreshold() {
+        return cpuThreshold;
+    }
+
+    public int getMemoryThreshold() {
+        return memoryThreshold;
+    }
+
+    public int getNetworkThreshold() {
+        return networkThreshold;
+    }
+
 
     public void simulateMonitoring() {
         try {
@@ -46,18 +68,25 @@ public class Server {
     }
 
     public String checkThresholds() {
-        StringBuilder message = new StringBuilder();
+        StringBuilder message = new StringBuilder("SMS sent to 123-456-7890: ");
+        boolean hasWarning = false;
+
         if (cpuUsage > 90) {
-            message.append("Warning: CPU usage is high. ");
+            message.append("Warning: Server " + this.name + " CPU usage is high. ");
+            hasWarning = true;
         }
         if (memoryUsage > 90) {
-            message.append("Warning: Memory usage is high. ");
+            message.append("Warning: Server " + this.name + " Memory usage is high. ");
+            hasWarning = true;
         }
         if (networkLatency > 90) {
-            message.append("Warning: Network latency is high. ");
+            message.append("Warning: Server " + this.name + " Network latency is high. ");
+            hasWarning = true;
         }
-        return message.toString();
+
+        return hasWarning ? message.toString() : "";
     }
+
 
     public String getName() {
         return this.name;

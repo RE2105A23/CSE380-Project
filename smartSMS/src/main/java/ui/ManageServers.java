@@ -26,9 +26,9 @@ public class ManageServers extends JPanel {
         for (Server server : this.servers) {
             Object[] rowData = {
                     server.getName(),
-                    String.format("%.2f", server.getCpuUsage()),
-                    String.format("%.2f", server.getMemoryUsage()),
-                    String.format("%.2f", server.getNetworkLatency())
+                    server.getCpuThreshold(),
+                    server.getMemoryThreshold(),
+                    server.getNetworkThreshold()
             };
             this.tableModel.addRow(rowData);
         }
@@ -98,13 +98,13 @@ public class ManageServers extends JPanel {
                 String newName = JOptionPane.showInputDialog("Enter new Server Name:", serverToEdit.getName());
                 if (newName == null || newName.isEmpty()) return; // User cancelled or entered blank, exit the method
 
-                String newCpuLimitStr = JOptionPane.showInputDialog("Enter new CPU Limit:", serverToEdit.getCpuUsage());
+                String newCpuLimitStr = JOptionPane.showInputDialog("Enter new CPU Limit:", serverToEdit.getCpuThreshold());
                 if (newCpuLimitStr == null) return; // User cancelled, exit the method
 
-                String newMemoryLimitStr = JOptionPane.showInputDialog("Enter new Memory Limit:", serverToEdit.getMemoryUsage());
+                String newMemoryLimitStr = JOptionPane.showInputDialog("Enter new Memory Limit:", serverToEdit.getMemoryThreshold());
                 if (newMemoryLimitStr == null) return; // User cancelled, exit the method
 
-                String newNetworkLimitStr = JOptionPane.showInputDialog("Enter new Network Limit:", serverToEdit.getNetworkLatency());
+                String newNetworkLimitStr = JOptionPane.showInputDialog("Enter new Network Limit:", serverToEdit.getNetworkThreshold());
                 if (newNetworkLimitStr == null) return; // User cancelled, exit the method
 
                 try {
