@@ -139,7 +139,7 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
 
         JButton setThresholdsButton = new JButton("Set Thresholds");
         setThresholdsButton.addActionListener(e -> {
-            // Open threshold settings panel
+            setThresholdsForServers();
         });
 
         adminPanel.add(manageServersButton);  // Add the button to the JPanel
@@ -351,5 +351,56 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
         manageUsersFrame.setVisible(true);
         manageUsersFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
+
+    private void setThresholdsForServers() {
+        // Create a dialog box with input fields
+        JComboBox<String> serverDropdown = new JComboBox<>();
+        for (Server server : servers) {
+            serverDropdown.addItem(server.getName());
+        }
+        JTextField cpuField = new JTextField(5);
+        JTextField memoryField = new JTextField(5);
+        JTextField networkField = new JTextField(5);
+        JCheckBox applyToAllCheckbox = new JCheckBox("Apply to All Servers");
+
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Select Server:"));
+        panel.add(serverDropdown);
+        panel.add(new JLabel("CPU Limit:"));
+        panel.add(cpuField);
+        panel.add(new JLabel("Memory Limit:"));
+        panel.add(memoryField);
+        panel.add(new JLabel("Network Limit:"));
+        panel.add(networkField);
+        panel.add(applyToAllCheckbox);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Set Thresholds", JOptionPane.OK_CANCEL_OPTION);
+
+        if (result == JOptionPane.OK_OPTION) {
+            // Validate and set the thresholds
+            String selectedServerName = (String) serverDropdown.getSelectedItem();
+            int cpuThreshold = Integer.parseInt(cpuField.getText());
+            int memoryThreshold = Integer.parseInt(memoryField.getText());
+            int networkThreshold = Integer.parseInt(networkField.getText());
+
+            if (applyToAllCheckbox.isSelected()) {
+                for (Server server : servers) {
+                    server.setCpuThreshold(cpuThreshold);
+                    server.setMemoryThreshold(memoryThreshold);
+                    server.setNetworkThreshold(networkThreshold);
+                }
+            } else {
+                for (Server server : servers) {
+                    if (server.getName().equals(selectedServerName)) {
+                        server.setCpuThreshold(cpuThreshold);
+                        server.setMemoryThreshold(memoryThreshold);
+                        server.setNetworkThreshold(networkThreshold);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
 
 }

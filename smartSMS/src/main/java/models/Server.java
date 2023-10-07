@@ -37,7 +37,18 @@ public class Server {
         return networkThreshold;
     }
 
+    // Add these setter methods for the thresholds
+    public void setCpuThreshold(int cpuThreshold) {
+        this.cpuThreshold = cpuThreshold;
+    }
 
+    public void setMemoryThreshold(int memoryThreshold) {
+        this.memoryThreshold = memoryThreshold;
+    }
+
+    public void setNetworkThreshold(int networkThreshold) {
+        this.networkThreshold = networkThreshold;
+    }
     public void simulateMonitoring() {
         try {
             // existing code
@@ -71,15 +82,16 @@ public class Server {
         StringBuilder message = new StringBuilder("SMS sent to 123-456-7890: ");
         boolean hasWarning = false;
 
-        if (cpuUsage > 90) {
+        // Use class variables for thresholds
+        if (cpuUsage > cpuThreshold) {
             message.append("Warning: Server " + this.name + " CPU usage is high. ");
             hasWarning = true;
         }
-        if (memoryUsage > 90) {
+        if (memoryUsage > memoryThreshold) {
             message.append("Warning: Server " + this.name + " Memory usage is high. ");
             hasWarning = true;
         }
-        if (networkLatency > 90) {
+        if (networkLatency > networkThreshold) {
             message.append("Warning: Server " + this.name + " Network latency is high. ");
             hasWarning = true;
         }
