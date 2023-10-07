@@ -299,3 +299,9 @@ Server3: CPU=42.92, Memory=33.04, Latency=32.42
 Server1: CPU=29.18, Memory=29.03, Latency=39.30
 Server2: CPU=76.58, Memory=23.42, Latency=10.76
 Server3: CPU=46.13, Memory=60.15, Latency=89.78
+Server1: CPU=60.57, Memory=12.98, Latency=88.60
+Server2: CPU=30.37, Memory=47.94, Latency=70.85
+Server3: CPU=52.27, Memory=35.58, Latency=9.75
+Server1: CPU=40.23, Memory=21.07, Latency=22.45
+Server2: CPU=47.71, Memory=98.55, Latency=28.09
+Server3: CPU=29.20, Memory=94.39, Latency=55.80

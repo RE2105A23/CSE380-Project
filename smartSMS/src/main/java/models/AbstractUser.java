@@ -1,6 +1,9 @@
 package main.java.models;
 
-public abstract class AbstractUser {
+import java.io.Serializable;
+import java.util.Objects;
+
+public abstract class AbstractUser implements Serializable {
     private String username;
     private String password;
     private String role;
@@ -40,5 +43,18 @@ public abstract class AbstractUser {
     // Abstract methods for login and logout
     public abstract void login();
     public abstract void logout();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractUser that = (AbstractUser) o;
+        return username.equals(that.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username);
+    }
 
 }

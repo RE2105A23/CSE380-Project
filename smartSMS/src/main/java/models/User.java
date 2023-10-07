@@ -1,8 +1,9 @@
 package main.java.models;
 
 import java.util.List;
+import java.io.Serializable;
 
-public class User extends AbstractUser {
+public class User extends AbstractUser implements Serializable {
     private List<Server> serverList;
 
     public User(String username, String password, String role, List<Server> servers) {
@@ -29,21 +30,8 @@ public class User extends AbstractUser {
         System.out.println("User " + getUsername() + " logged out.");
     }
 
-    /*
     public void viewServerStatus() {
-        for (Server server : serverList) {
-            System.out.println("Server: " + server.getName() + ", CPU: " + server.getCpuUsage() + ", Memory: " + server.getMemoryUsage() + ", Latency: " + server.getNetworkLatency());
-        }
-    }
-
-    public void requestServerRestart(Server server) {
-        System.out.println("Restart request sent for server: " + server.getName());
-    }
-    */
-
-    public void viewServerStatus() {
-        if ("user".equals(getRole())) {
-            // Logic to view server status
+        if (hasPrivilege("view")) {
             for (Server server : serverList) {
                 System.out.println("Server: " + server.getName() + ", CPU: " + server.getCpuUsage() + ", Memory: " + server.getMemoryUsage() + ", Latency: " + server.getNetworkLatency());
             }
@@ -53,12 +41,22 @@ public class User extends AbstractUser {
     }
 
     public void requestServerRestart(Server server) {
-        if ("user".equals(getRole())) {
-            // Logic to request server restart
+        if (hasPrivilege("restart")) {
             System.out.println("Restart request sent for server: " + server.getName());
         } else {
             System.out.println("Insufficient privileges to request server restart.");
         }
     }
 
+    private boolean hasPrivilege(String action) {
+        // You can extend this method to include more complex role-based logic
+        switch (action) {
+            case "view":
+                return "user".equals(getRole()) || "admin".equals(getRole());
+            case "restart":
+                return "admin".equals(getRole());
+            default:
+                return false;
+        }
+    }
 }

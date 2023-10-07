@@ -1,8 +1,9 @@
 package main.java.models;
 
 import java.util.List;
+import java.io.Serializable;
 
-public class Admin extends AbstractUser {
+public class Admin extends AbstractUser implements Serializable {
     private List<Server> managedServers;
 
     public Admin(String username, String password, String role, List<Server> managedServers) {

@@ -69,3 +69,5 @@ Server3: Warning: CPU usage is high.
 Server2: Warning: CPU usage is high. Warning: Memory usage is high. Warning: Network latency is high. 
 Server3: Warning: Memory usage is high. 
 Server2: Warning: Memory usage is high. 
+Server2: SMS sent to 123-456-7890: Warning: Server Server2 Memory usage is high. 
+Server3: SMS sent to 123-456-7890: Warning: Server Server3 Memory usage is high. 

@@ -5,7 +5,13 @@ import main.java.models.ServerRestarter;
 import main.java.utils.FileHandler;
 import main.java.utils.SMSHandler;
 import main.java.models.AbstractUser;
+import java.util.ArrayList;
+import main.java.models.User;  // Import User model
+import main.java.utils.UserDatabase;  // Import UserDatabase
 import main.java.ui.ManageServers;
+import main.java.utils.FileHandler;
+import main.java.models.AbstractUser;
+
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -14,7 +20,9 @@ import javax.swing.event.TableModelEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.List;
+import java.io.IOException;
+
 
 public class DashboardPanel extends JPanel implements ServerRestarter {
     private JLabel welcomeLabel;
@@ -27,6 +35,8 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
     private JTextField cpuLimitField;  // And so on for other fields
     private JTextField memoryLimitField;
     private JTextField networkLimitField;
+    //private ArrayList<User> users;  // Add this field for User list
+    private List<AbstractUser> users;  // Change this field to List<AbstractUser>
 
 
     public DashboardPanel(AbstractUser currentUser) {
@@ -43,6 +53,17 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
         servers.add(new Server("Server1", 20, 50, 100));
         servers.add(new Server("Server2", 20, 50, 100));
         servers.add(new Server("Server3", 20, 50, 100));
+
+        // Initialize User List
+        //users = new ArrayList<>();  // Initialize the users list
+        // Initialize User List from UserDatabase
+        this.users = UserDatabase.users;  // Directly reference the users list from UserDatabase
+
+        // OR Initialize from a text file (if you choose this approach)
+        // this.users = FileHandler.readUsersFromFile("path/to/users.txt");
+        // Add some dummy users for demonstration
+        // users.add(new User("username1", "password1", "role1", new ArrayList<>()));
+        // users.add(new User("username2", "password2", "role2", new ArrayList<>()));
 
         // Table to display server statuses
         String[] columnNames = {"Server Name", "CPU Usage", "Memory Usage", "Network Latency", "Actions"};
@@ -79,6 +100,10 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
         // Initialize button for managing servers
         JButton manageServersButton = new JButton("Manage Servers");
         manageServersButton.addActionListener(e -> openManageServersPanel());
+        // Initialize button for managing users
+        JButton manageUsersButton = new JButton("Manage Users");
+        manageUsersButton.addActionListener(e -> openManageUsersPanel());
+
 
         /*
         if ("admin".equals(this.role)) {
@@ -105,9 +130,12 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
         */
 
         JButton manageUsersButton = new JButton("Manage Users");
+        manageUsersButton.addActionListener(e -> openManageUsersPanel());
+        /*
         manageUsersButton.addActionListener(e -> {
             // Open user management panel
         });
+        */
 
         JButton setThresholdsButton = new JButton("Set Thresholds");
         setThresholdsButton.addActionListener(e -> {
@@ -301,4 +329,27 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
         manageServersFrame.setVisible(true);
         manageServersFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
+
+    private void openManageUsersPanel() {
+        List<AbstractUser> allUsers = new ArrayList<>();
+        // Load users from UserDatabase
+        if (UserDatabase.users != null) {
+            allUsers.addAll(UserDatabase.users);
+        }
+
+        // Load users from users.txt
+        //List<AbstractUser> fileUsers = FileHandler.readUsersFromTextFile("users.txt"); // Assuming you have a method that reads users from a text file
+        List<AbstractUser> fileUsers = FileHandler.readUsersFromCSVFile("users.csv"); // Assuming you have a method that reads users from a text file
+        if (fileUsers != null) {
+            allUsers.addAll(fileUsers);
+        }
+
+        JFrame manageUsersFrame = new JFrame("Manage Users");
+        ManageUsers manageUsersPanel = new ManageUsers(allUsers);  // No need for explicit cast now
+        manageUsersFrame.add(manageUsersPanel);
+        manageUsersFrame.setSize(1000, 400);
+        manageUsersFrame.setVisible(true);
+        manageUsersFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+
 }

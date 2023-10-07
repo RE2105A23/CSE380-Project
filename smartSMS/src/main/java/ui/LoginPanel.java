@@ -3,10 +3,12 @@ package main.java.ui;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import main.java.models.AbstractUser;
 import main.java.models.Admin;
 import main.java.models.User;
 import main.java.utils.UserDatabase;
+import main.java.utils.FileHandler;
 
 public class LoginPanel extends JPanel {
     private JLabel userLabel;
@@ -43,8 +45,22 @@ public class LoginPanel extends JPanel {
         String username = userText.getText();
         String password = new String(passwordText.getPassword());
 
-        // Inside handleLogin() method
+        // First, try to authenticate using UserDatabase
         AbstractUser currentUser = UserDatabase.authenticate(username, password);
+
+        // If authentication fails, try to authenticate using users.txt
+        if (currentUser == null) {
+            //List<AbstractUser> usersFromFile = FileHandler.readUsersFromTextFile("users.txt");
+            List<AbstractUser> usersFromFile = FileHandler.readUsersFromCSVFile("users.csv");
+            for (AbstractUser user : usersFromFile) {
+                if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                    currentUser = user;
+                    break;
+                }
+            }
+        }
+
+        // Check if authentication was successful
         if (currentUser != null) {
             JOptionPane.showMessageDialog(this, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
