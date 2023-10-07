@@ -38,15 +38,26 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
     //private ArrayList<User> users;  // Add this field for User list
     private List<AbstractUser> users;  // Change this field to List<AbstractUser>
 
+    private GridBagConstraints gbc = new GridBagConstraints();  // Declare it here
 
     public DashboardPanel(AbstractUser currentUser) {
+        setLayout(new GridBagLayout());  // Use GridBagLayout
+        //GridBagConstraints gbc = new GridBagConstraints();
+
         this.currentUser = currentUser;
         System.out.println("Current User Role: " + currentUser.getRole());
-        setLayout(new BorderLayout());
 
         // Welcome Label
         welcomeLabel = new JLabel("Welcome to the SMS-based Remote Server Monitoring System!");
-        add(welcomeLabel, BorderLayout.NORTH);
+        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 0.1;
+//        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        add(welcomeLabel, gbc);
 
         // Initialize Server List
         servers = new ArrayList<>();
@@ -54,26 +65,24 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
         servers.add(new Server("Server2", 20, 50, 100));
         servers.add(new Server("Server3", 20, 50, 100));
 
-        // Initialize User List
-        //users = new ArrayList<>();  // Initialize the users list
         // Initialize User List from UserDatabase
         this.users = UserDatabase.users;  // Directly reference the users list from UserDatabase
-
-        // OR Initialize from a text file (if you choose this approach)
-        // this.users = FileHandler.readUsersFromFile("path/to/users.txt");
-        // Add some dummy users for demonstration
-        // users.add(new User("username1", "password1", "role1", new ArrayList<>()));
-        // users.add(new User("username2", "password2", "role2", new ArrayList<>()));
 
         // Table to display server statuses
         String[] columnNames = {"Server Name", "CPU Usage", "Memory Usage", "Network Latency", "Actions"};
         tableModel = new DefaultTableModel(columnNames, 0);
         serverTable = new JTable(tableModel);
-        add(new JScrollPane(serverTable), BorderLayout.CENTER);
+        add(new JScrollPane(serverTable), gbc);
 
         // Add custom renderer and editor for the "Actions" column
         serverTable.getColumn("Actions").setCellRenderer(new SimpleButtonRenderer());
         serverTable.getColumnModel().getColumn(4).setCellEditor(new SimpleButtonEditor());
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weighty = 0.9;
+        gbc.fill = GridBagConstraints.BOTH;
+        add(new JScrollPane(serverTable), gbc);
 
         // Simulate server monitoring
         simulateServerMonitoring();
@@ -90,52 +99,48 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
 
         if (currentUser != null) {
             if ("admin".equals(currentUser.getRole())) {
-                initializeAdminDashboard();
+                initializeAdminDashboard(gbc);  // Pass gbc
             } else {
-                initializeUserDashboard();
+                initializeUserDashboard(gbc);  // Pass gbc
             }
         } else {
             System.out.println("Error: currentUser is null");
         }
+
+        /*
         // Initialize button for managing servers
         JButton manageServersButton = new JButton("Manage Servers");
         manageServersButton.addActionListener(e -> openManageServersPanel());
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weighty = 0.05;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        add(manageServersButton, gbc);
+
         // Initialize button for managing users
         JButton manageUsersButton = new JButton("Manage Users");
         manageUsersButton.addActionListener(e -> openManageUsersPanel());
 
-
-        /*
-        if ("admin".equals(this.role)) {
-            JButton adminButton = new JButton("Admin Action");
-            adminButton.addActionListener(e -> {
-                // Implement your admin-specific logic here
-                System.out.println("Admin button clicked");
-            });
-            add(adminButton, BorderLayout.SOUTH);
-        }
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.weighty = 0.05;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        add(manageUsersButton, gbc);
         */
+
     }
 
-    private void initializeAdminDashboard() {
+    private void initializeAdminDashboard(GridBagConstraints gbc) {
         System.out.println("Initializing Admin Dashboard");  // Debugging line
         JPanel adminPanel = new JPanel(new FlowLayout());  // Create a new JPanel with FlowLayout
-        JButton manageServersButton = new JButton("Manage Servers");
 
+
+        JButton manageServersButton = new JButton("Manage Servers");
         manageServersButton.addActionListener(e -> openManageServersPanel());
-        /*
-        manageServersButton.addActionListener(e -> {
-            // Open server management panel
-        });
-        */
 
         JButton manageUsersButton = new JButton("Manage Users");
         manageUsersButton.addActionListener(e -> openManageUsersPanel());
-        /*
-        manageUsersButton.addActionListener(e -> {
-            // Open user management panel
-        });
-        */
 
         JButton setThresholdsButton = new JButton("Set Thresholds");
         setThresholdsButton.addActionListener(e -> {
@@ -146,10 +151,14 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
         adminPanel.add(manageUsersButton);    // Add the button to the JPanel
         adminPanel.add(setThresholdsButton);  // Add the button to the JPanel
 
-        add(adminPanel, BorderLayout.SOUTH);  // Add the JPanel to the SOUTH region
+        gbc.gridx = 0;
+        gbc.gridy = 4;  // Adjust as needed
+        gbc.weighty = 0.1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        add(adminPanel, gbc);  // Use GridBagConstraints
     }
 
-    private void initializeUserDashboard() {
+    private void initializeUserDashboard(GridBagConstraints gbc) {
         System.out.println("Initializing User Dashboard");  // Debugging line
         JPanel userPanel = new JPanel(new FlowLayout());  // Create a new JPanel with FlowLayout
         JButton requestRestartButton = new JButton("Request Server Restart");
@@ -165,7 +174,11 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
         userPanel.add(requestRestartButton);    // Add the button to the JPanel
         userPanel.add(subscribeAlertsButton);  // Add the button to the JPanel
 
-        add(userPanel, BorderLayout.SOUTH);  // Add the JPanel to the SOUTH region
+        gbc.gridx = 0;
+        gbc.gridy = 4;  // Adjust as needed
+        gbc.weighty = 0.1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        add(userPanel, gbc);  // Use GridBagConstraints
     }
 
     private void simulateServerMonitoring() {
