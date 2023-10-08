@@ -69,14 +69,30 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
         this.users = UserDatabase.users;  // Directly reference the users list from UserDatabase
 
         // Table to display server statuses
-        String[] columnNames = {"Server Name", "CPU Usage", "Memory Usage", "Network Latency", "Actions"};
+        String[] columnNames;
+        if ("admin".equals(currentUser.getRole())) {
+            columnNames = new String[]{"Server Name", "CPU Usage", "Memory Usage", "Network Latency", "Actions"};
+        } else {
+            columnNames = new String[]{"Server Name", "CPU Usage", "Memory Usage", "Network Latency"};
+        }
         tableModel = new DefaultTableModel(columnNames, 0);
         serverTable = new JTable(tableModel);
-        add(new JScrollPane(serverTable), gbc);
+
+        if ("admin".equals(currentUser.getRole())) {
+            try {
+                // Add custom renderer and editor for the "Actions" column only for admin
+                serverTable.getColumn("Actions").setCellRenderer(new SimpleButtonRenderer());
+                serverTable.getColumnModel().getColumn(4).setCellEditor(new SimpleButtonEditor());
+            } catch (IllegalArgumentException e) {
+                // Log the exception
+                System.err.println("Column not found: " + e.getMessage());
+            }
+        }
+        //add(new JScrollPane(serverTable), gbc);
 
         // Add custom renderer and editor for the "Actions" column
-        serverTable.getColumn("Actions").setCellRenderer(new SimpleButtonRenderer());
-        serverTable.getColumnModel().getColumn(4).setCellEditor(new SimpleButtonEditor());
+        //serverTable.getColumn("Actions").setCellRenderer(new SimpleButtonRenderer());
+        //serverTable.getColumnModel().getColumn(4).setCellEditor(new SimpleButtonEditor());
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -160,15 +176,34 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
 
     private void initializeUserDashboard(GridBagConstraints gbc) {
         System.out.println("Initializing User Dashboard");  // Debugging line
+
         JPanel userPanel = new JPanel(new FlowLayout());  // Create a new JPanel with FlowLayout
         JButton requestRestartButton = new JButton("Request Server Restart");
         requestRestartButton.addActionListener(e -> {
-            // Send request to admin
+            int selectedRow = serverTable.getSelectedRow();
+            if (selectedRow != -1) {
+                Server selectedServer = servers.get(selectedRow);
+                requestServerRestart(selectedServer);
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select a server to restart.");
+            }
         });
+
+        // Initialize serverDropdown and alertTypeDropdown
+        serverDropdown = new JComboBox();
+        alertTypeDropdown = new JComboBox();
+
+        // Update the dropdowns
+        updateDropdowns();
+
+        // Add them to the panel using GridBagConstraints
+        // Set gbc properties as needed
+        add(serverDropdown, gbc);
+        add(alertTypeDropdown, gbc);
 
         JButton subscribeAlertsButton = new JButton("Subscribe to Alerts");
         subscribeAlertsButton.addActionListener(e -> {
-            // Subscribe to server alerts
+            subscribeToAlerts();
         });
 
         userPanel.add(requestRestartButton);    // Add the button to the JPanel
@@ -414,6 +449,165 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
             }
         }
     }
+
+    // Overloaded Method to handle server restart request without a Server object
+    private void requestServerRestart() {
+        // Logic to pick a server to restart
+        // For demonstration, let's say we pick the first server from the list
+        Server serverToRestart = servers.get(0);
+        requestServerRestart(serverToRestart);
+    }
+
+    // Method to handle server restart request with a Server object
+    private void requestServerRestart(Server serverToRestart) {
+        // Confirm with the user
+        int dialogResult = JOptionPane.showConfirmDialog(this,
+                "Do you want to restart " + serverToRestart.getName() + "?",
+                "Confirm Restart",
+                JOptionPane.YES_NO_OPTION);
+
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            // Send the restart request to the admin
+            sendRestartRequestToAdmin(serverToRestart);
+        }
+    }
+
+    // Method to send restart request to admin
+    private void sendRestartRequestToAdmin(Server server) {
+        // Logic to send a restart request to the admin
+        // This could be an API call, database update, etc.
+        System.out.println("Restart request for " + server.getName() + " sent to admin.");
+    }
+
+    // Method to handle subscription to alerts
+    private JComboBox<String> serverDropdown;
+    private JComboBox<String> alertTypeDropdown;
+    private void subscribeToAlerts() {
+        JPanel panel = createSubscriptionPanel();
+        int result = showSubscriptionDialog(panel);
+
+        if (result == JOptionPane.OK_OPTION) {
+            handleSubscription();
+        }
+    }
+
+    private JPanel createSubscriptionPanel() {
+        JComboBox<String> serverDropdown = createServerDropdown();
+        JComboBox<String> alertTypeDropdown = createAlertTypeDropdown();
+
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Select Server:"));
+        panel.add(serverDropdown);
+        panel.add(new JLabel("Select Alert Type:"));
+        panel.add(alertTypeDropdown);
+
+        return panel;
+    }
+
+    private JComboBox<String> createServerDropdown() {
+        JComboBox<String> serverDropdown = new JComboBox<>();
+        serverDropdown.addItem("All Servers");
+        for (Server server : servers) {
+            serverDropdown.addItem(server.getName());
+        }
+        return serverDropdown;
+    }
+
+    private JComboBox<String> createAlertTypeDropdown() {
+        String[] alertTypes = {"All Alerts", "CPU Usage", "Memory Usage", "Network Latency"};
+        JComboBox<String> dropdown = new JComboBox<>(alertTypes);
+        return dropdown;
+    }
+
+    private int showSubscriptionDialog(JPanel panel) {
+        return JOptionPane.showConfirmDialog(null, panel, "Subscribe to Alerts", JOptionPane.OK_CANCEL_OPTION);
+    }
+
+    private void handleSubscription() {
+        if (serverDropdown == null || alertTypeDropdown == null) {
+            // Log an error or show a message to the user
+            System.err.println("Dropdowns are not initialized.");
+            return;
+        }
+
+        String selectedServerName = (String) serverDropdown.getSelectedItem();
+        String selectedAlertType = (String) alertTypeDropdown.getSelectedItem();
+
+        if (selectedServerName == null || selectedAlertType == null) {
+            // Log an error or show a message to the user
+            System.err.println("No selection made in one or both dropdowns.");
+            return;
+        }
+
+        if ("All Servers".equals(selectedServerName)) {
+            if ("All Alerts".equals(selectedAlertType)) {
+                subscribeAllServersToAllAlerts();
+            } else {
+                subscribeAllServers(selectedAlertType);
+            }
+        } else {
+            if ("All Alerts".equals(selectedAlertType)) {
+                subscribeSpecificServerToAllAlerts(selectedServerName);
+            } else {
+                subscribeSpecificServer(selectedServerName, selectedAlertType);
+            }
+        }
+    }
+
+    private void subscribeAllServersToAllAlerts() {
+        for (Server server : servers) {
+            server.subscribeToAlert("CPU Usage");
+            server.subscribeToAlert("Memory Usage");
+            server.subscribeToAlert("Network Latency");
+        }
+    }
+
+    private void subscribeSpecificServerToAllAlerts(String serverName) {
+        for (Server server : servers) {
+            if (server.getName().equals(serverName)) {
+                server.subscribeToAlert("CPU Usage");
+                server.subscribeToAlert("Memory Usage");
+                server.subscribeToAlert("Network Latency");
+                break;
+            }
+        }
+    }
+
+    private void subscribeAllServers(String alertType) {
+        for (Server server : servers) {
+            server.subscribeToAlert(alertType);
+        }
+    }
+
+    private void subscribeSpecificServer(String serverName, String alertType) {
+        for (Server server : servers) {
+            if (server.getName().equals(serverName)) {
+                server.subscribeToAlert(alertType);
+                break;
+            }
+        }
+    }
+
+    private void updateDropdowns() {
+        // Clear existing items
+        serverDropdown.removeAllItems();
+        alertTypeDropdown.removeAllItems();
+
+        // Add 'All Servers' and 'All Alerts' options
+        serverDropdown.addItem("All Servers");
+        alertTypeDropdown.addItem("All Alerts");
+
+        // Populate serverDropdown with server names
+        for (Server server : servers) {
+            serverDropdown.addItem(server.getName());
+        }
+
+        // Populate alertTypeDropdown with alert types (replace with your actual alert types)
+        alertTypeDropdown.addItem("CPU Alert");
+        alertTypeDropdown.addItem("Memory Alert");
+        // Add more alert types as needed
+    }
+
 
 
 }

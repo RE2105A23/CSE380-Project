@@ -2,6 +2,8 @@ package main.java.models;
 
 import main.java.exceptions.ServerException;
 import main.java.utils.FileHandler;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Server {
     private String name;
@@ -11,6 +13,8 @@ public class Server {
     private int cpuThreshold;
     private int memoryThreshold;
     private int networkThreshold;
+    // A map to hold subscriptions for different alert types
+    private Map<String, Boolean> alertSubscriptions;
 
     public Server(String name, int cpuThreshold, int memoryThreshold, int networkThreshold) {
         this.name = name;
@@ -21,6 +25,11 @@ public class Server {
         this.cpuThreshold = cpuThreshold;
         this.memoryThreshold = memoryThreshold;
         this.networkThreshold = networkThreshold;
+        // Initialize the alert subscriptions map
+        alertSubscriptions = new HashMap<>();
+        alertSubscriptions.put("CPU Usage", false);
+        alertSubscriptions.put("Memory Usage", false);
+        alertSubscriptions.put("Network Latency", false);
     }
 
 
@@ -130,6 +139,25 @@ public class Server {
         //System.out.println("Server restarted. Metrics set to 0.0");
         System.out.println("Server " + this.getName() + " metrics after restart: CPU=" + this.cpuUsage + ", Memory=" + this.memoryUsage + ", Latency=" + this.networkLatency);
         //FileHandler.writeLog("server_actions.txt", "Restarted " + this.getName());
+    }
+
+    public void subscribeToAlert(String alertType) {
+        if ("All Alerts".equals(alertType)) {
+            for (String key : alertSubscriptions.keySet()) {
+                alertSubscriptions.put(key, true);
+            }
+            System.out.println("Subscribed to all alerts for server " + name);
+        } else if (alertSubscriptions.containsKey(alertType)) {
+            alertSubscriptions.put(alertType, true);
+            System.out.println("Subscribed to " + alertType + " alerts for server " + name);
+        } else {
+            System.out.println("Invalid alert type: " + alertType);
+        }
+    }
+
+    // Method to check if the server is subscribed to a particular alert
+    public boolean isSubscribedToAlert(String alertType) {
+        return alertSubscriptions.getOrDefault(alertType, false);
     }
 }
 
