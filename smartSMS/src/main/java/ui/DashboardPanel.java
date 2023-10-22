@@ -1,5 +1,7 @@
 package main.java.ui;
 
+import com.sun.org.apache.bcel.internal.classfile.ModuleMainClass;
+import main.java.main.Main;
 import main.java.models.Server;
 import main.java.models.ServerRestarter;
 import main.java.utils.FileHandler;
@@ -123,27 +125,20 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
             System.out.println("Error: currentUser is null");
         }
 
-        /*
-        // Initialize button for managing servers
-        JButton manageServersButton = new JButton("Manage Servers");
-        manageServersButton.addActionListener(e -> openManageServersPanel());
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.setBounds(50, 50, 100, 30);  // Example coordinates
+        logoutButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Close the current window
+                JFrame dashboardFrame = (JFrame) SwingUtilities.getWindowAncestor(logoutButton);
+                dashboardFrame.dispose();
 
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.weighty = 0.05;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(manageServersButton, gbc);
+                // Open the login screen
+                main.java.main.Main.createAndShowGUI();
+            }
+        });
 
-        // Initialize button for managing users
-        JButton manageUsersButton = new JButton("Manage Users");
-        manageUsersButton.addActionListener(e -> openManageUsersPanel());
-
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.weighty = 0.05;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(manageUsersButton, gbc);
-        */
+        add(logoutButton);
 
     }
 
