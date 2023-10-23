@@ -6,9 +6,9 @@ import java.io.Serializable;
 public class User extends AbstractUser implements Serializable {
     private List<Server> serverList;
 
-    public User(String username, String password, String role, List<Server> servers) {
-        super(username, password, role);
-        this.serverList = servers;
+    public User(String username, String password, String role, String phoneNumber, List<Server> serverList) {
+        super(username, password, role, phoneNumber);
+        this.serverList = serverList;
     }
 
     // Getters and Setters for serverList
@@ -59,4 +59,5 @@ public class User extends AbstractUser implements Serializable {
                 return false;
         }
     }
+
 }

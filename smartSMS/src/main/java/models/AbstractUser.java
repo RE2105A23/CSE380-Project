@@ -7,12 +7,14 @@ public abstract class AbstractUser implements Serializable {
     private String username;
     private String password;
     private String role;
+    private String phoneNumber;
 
     // Parameterized constructor
-    public AbstractUser(String username, String password, String role) {
+    public AbstractUser(String username, String password, String role, String phoneNumber) {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.phoneNumber = phoneNumber;
     }
 
     // Getters and Setters
@@ -39,6 +41,10 @@ public abstract class AbstractUser implements Serializable {
     public void setRole(String role) {
         this.role = role;
     }
+
+    public String getPhoneNumber() {return phoneNumber;}
+
+    public void setPhoneNumber(String phoneNumber) {this.phoneNumber = phoneNumber;}
 
     // Abstract methods for login and logout
     public abstract void login();

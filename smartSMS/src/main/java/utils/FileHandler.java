@@ -70,7 +70,7 @@ public class FileHandler {
     }
 
     private static String formatUser(AbstractUser user) {
-        return user.getUsername() + "," + user.getPassword() + "," + user.getRole();
+        return user.getUsername() + "," + user.getPassword() + "," + user.getRole() + "," + user.getPhoneNumber();
     }
 
     private static List<AbstractUser> readUsersFromFile(String filename, String fileType) {
@@ -102,22 +102,23 @@ public class FileHandler {
 
     private static void addUserFromLine(String line, List<AbstractUser> users) {
         String[] parts = line.split(",");
-        if (parts.length >= 3) {
+        if (parts.length >= 4) {  // Make sure you have at least 4 parts
             String username = parts[0];
             String password = parts[1];
             String role = parts[2];
-            AbstractUser user = createUser(username, password, role);
+            String phoneNumber = parts[3];  // Make sure this is not null or empty
+            AbstractUser user = createUser(username, password, role, phoneNumber);
             if (user != null) {
                 users.add(user);
             }
         }
     }
 
-    private static AbstractUser createUser(String username, String password, String role) {
+    private static AbstractUser createUser(String username, String password, String role, String phoneNumber) {
         if ("admin".equals(role)) {
-            return new Admin(username, password, role, null);
+            return new Admin(username, password, role, phoneNumber, null);
         } else {
-            return new User(username, password, role, null);
+            return new User(username, password, role, phoneNumber, null);
         }
     }
 
@@ -144,11 +145,15 @@ public class FileHandler {
 
         // Append the new user to the file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
-            writer.newLine();
+            // Check if this is the first line in the file
+            if (existingUsers.size() > 0) {
+                writer.newLine();
+            }
             writer.write(formatUser(newUser));
         } catch (IOException e) {
             handleException("Error appending user to file", e);
         }
     }
+
 
 }

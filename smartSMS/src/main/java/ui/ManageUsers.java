@@ -10,9 +10,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class ManageUsers extends JPanel {
     private JTable userTable;
@@ -20,11 +20,10 @@ public class ManageUsers extends JPanel {
     private ArrayList<AbstractUser> users;
 
     public ManageUsers(List<? extends AbstractUser> users) {
-        //this.users = new ArrayList<>(users);
         this.users = new ArrayList<>(FileHandler.readUsersFromCSVFile("users.csv"));
         setLayout(new BorderLayout());
 
-        String[] columnNames = {"Username", "Role"};
+        String[] columnNames = {"Username", "Role", "Phone Number"};
         tableModel = new DefaultTableModel(columnNames, 0);
 
         populateTable();
@@ -49,40 +48,55 @@ public class ManageUsers extends JPanel {
     }
 
     private void populateTable() {
-        tableModel.setRowCount(0); // Clear existing rows
+        tableModel.setRowCount(0);
         for (AbstractUser user : this.users) {
-            Object[] rowData = {user.getUsername(), user.getRole()};
+            Object[] rowData = {user.getUsername(), user.getRole(), user.getPhoneNumber()};
             tableModel.addRow(rowData);
         }
     }
 
+    private String validateInput(String prompt, String defaultValue) {
+        String input;
+        do {
+            input = JOptionPane.showInputDialog(null, prompt, defaultValue);
+            if (input == null) {
+                return null;  // User clicked "X" or "Close"
+            }
+            if (!Pattern.matches("\\s*", input)) {
+                return input;
+            } else {
+                JOptionPane.showMessageDialog(null, "Should not be blank or contain only whitespace.");
+            }
+        } while (true);
+    }
+
+
     private class AddUserAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String username = JOptionPane.showInputDialog("Enter Username:");
+            String username = validateInput("Enter Username:", "");
+            String password = validateInput("Enter Password:", "");
+            String role = validateInput("Enter Role (admin/user):", "");
+            String phoneNumber = validateInput("Enter Phone Number:", "");
 
-            // Check for duplicate username
-            boolean isDuplicate = false;
-            for (AbstractUser user : users) {
-                if (user.getUsername().equals(username)) {
-                    isDuplicate = true;
-                    break;
-                }
+            // Check for null values
+            if (username == null || password == null || role == null || phoneNumber == null) {
+                JOptionPane.showMessageDialog(null, "Operation cancelled or incomplete data.");
+                return;
             }
 
+            // Check for duplicate username
+            boolean isDuplicate = users.stream().anyMatch(user -> user.getUsername().equals(username));
             if (isDuplicate) {
                 JOptionPane.showMessageDialog(null, "Username already exists.");
                 return; // Exit the method if username is duplicate
             }
 
-            String password = JOptionPane.showInputDialog("Enter Password:");
-            String role = JOptionPane.showInputDialog("Enter Role (admin/user):");
-
             AbstractUser newUser;
             if ("admin".equals(role)) {
-                newUser = new Admin(username, password, role, null);
+                newUser = new Admin(username, password, role, phoneNumber, null);
             } else {
-                newUser = new User(username, password, role, null);
+                newUser = new User(username, password, role, phoneNumber, null);
             }
 
             addUser(newUser);
@@ -97,13 +111,18 @@ public class ManageUsers extends JPanel {
             if (selectedRow >= 0 && selectedRow < users.size()) {
                 AbstractUser user = users.get(selectedRow);
 
-                String newUsername = JOptionPane.showInputDialog("Enter new Username:", user.getUsername());
-                String newPassword = JOptionPane.showInputDialog("Enter new Password:", user.getPassword());
-                String newRole = JOptionPane.showInputDialog("Enter new Role (admin/user):", user.getRole());
+                String newUsername = validateInput("Enter new Username:",user.getUsername());
+
+                String newPassword = validateInput("Enter new Password:", user.getPassword());
+
+                String newRole = validateInput("Enter new Role (admin/user):", user.getRole());
+
+                String newPhoneNumber = validateInput("Enter new Phone Number:", user.getPhoneNumber());
 
                 user.setUsername(newUsername);
                 user.setPassword(newPassword);
                 user.setRole(newRole);
+                user.setPhoneNumber(newPhoneNumber);
 
                 populateTable();
 
@@ -146,7 +165,7 @@ public class ManageUsers extends JPanel {
 
         if (!isDuplicate) {
             users.add(newUser);
-            Object[] rowData = {newUser.getUsername(), newUser.getRole()};
+            Object[] rowData = {newUser.getUsername(), newUser.getRole(), newUser.getPhoneNumber()};
             tableModel.addRow(rowData);
 
             FileHandler.appendUserToCSVFile("users.csv", newUser);

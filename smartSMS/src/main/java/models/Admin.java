@@ -6,8 +6,8 @@ import java.io.Serializable;
 public class Admin extends AbstractUser implements Serializable {
     private List<Server> managedServers;
 
-    public Admin(String username, String password, String role, List<Server> managedServers) {
-        super(username, password, role);
+    public Admin(String username, String password, String role, String phoneNumber, List<Server> managedServers) {
+        super(username, password, role, phoneNumber);
         this.managedServers = managedServers;
     }
 
@@ -29,18 +29,6 @@ public class Admin extends AbstractUser implements Serializable {
     public void logout() {
         System.out.println("Admin " + getUsername() + " logged out.");
     }
-
-    /*
-    public void addServer(Server server) {
-        managedServers.add(server);
-        System.out.println("Server " + server.getName() + " added.");
-    }
-
-    public void removeServer(Server server) {
-        managedServers.remove(server);
-        System.out.println("Server " + server.getName() + " removed.");
-    }
-    */
 
     public void viewAllServerStatus() {
         for (Server server : managedServers) {

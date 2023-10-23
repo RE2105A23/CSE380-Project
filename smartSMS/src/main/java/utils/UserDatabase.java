@@ -11,8 +11,8 @@ public class UserDatabase {
     public static List<AbstractUser> users = new ArrayList<>();
 
     static {
-        users.add(new Admin("admin", "123", "admin", null));
-        users.add(new User("user", "u123", "user", null));
+        users.add(new Admin("admin", "123", "admin", "123-4567-890" , null));
+        users.add(new User("user", "u123", "user", "098-7654-321" ,null));
     }
 
     public static AbstractUser authenticate(String username, String password) {

@@ -110,9 +110,10 @@ public class LoginPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
             // Switch to the dashboard
+            JPanel parentPanel = new JPanel();  // Or some existing JPanel instance
             JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
             mainFrame.getContentPane().removeAll();
-            mainFrame.add(new DashboardPanel(currentUser));  // Pass currentUser here
+            mainFrame.add(new DashboardPanel(currentUser,parentPanel));  // Pass currentUser here
             mainFrame.revalidate();
             mainFrame.repaint();
         } else {
