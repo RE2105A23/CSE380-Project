@@ -26,7 +26,7 @@ public class LoginPanel extends JPanel {
         setLayout(new GridBagLayout());  // Use GridBagLayout
         GridBagConstraints gbc = new GridBagConstraints();
 
-        welcomeLabel = new JLabel("Welcome to the Smart-SMS System");
+        welcomeLabel = new JLabel("Welcome to the Smart Server Management System");
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;

@@ -88,7 +88,8 @@ public class Server {
     }
 
     public String checkThresholds() {
-        StringBuilder message = new StringBuilder("SMS sent to 123-456-7890: ");
+        //StringBuilder message = new StringBuilder("SMS sent to 123-456-7890: ");
+        StringBuilder message = new StringBuilder();
         boolean hasWarning = false;
 
         // Use class variables for thresholds
@@ -138,7 +139,7 @@ public class Server {
         // Log the restart action
         //System.out.println("Server restarted. Metrics set to 0.0");
         System.out.println("Server " + this.getName() + " metrics after restart: CPU=" + this.cpuUsage + ", Memory=" + this.memoryUsage + ", Latency=" + this.networkLatency);
-        //FileHandler.writeLog("server_actions.txt", "Restarted " + this.getName());
+        FileHandler.writeLog("server_actions.txt", "Restarted " + this.getName());
     }
 
     public void subscribeToAlert(String alertType) {
@@ -159,5 +160,11 @@ public class Server {
     public boolean isSubscribedToAlert(String alertType) {
         return alertSubscriptions.getOrDefault(alertType, false);
     }
+
+    @Override
+    public String toString() {
+        return this.getName();  // Assuming you have a getName() method that returns the server's name
+    }
+
 }
 

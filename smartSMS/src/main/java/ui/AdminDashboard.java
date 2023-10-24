@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 
 public class AdminDashboard {
     private List<Server> servers;
@@ -19,6 +21,7 @@ public class AdminDashboard {
     private DashboardPanel dashboardPanel;  // Add this line to declare the field
 
     public AdminDashboard(List<Server> servers, List<AbstractUser> users, GridBagConstraints gbc, JPanel parentPanel, DashboardPanel dashboardPanel) {
+        //System.out.println("Number of servers in AdminDashboard: " + servers.size());  // Debug line
         this.servers = servers;
         this.users = users;
         this.gbc = gbc;
@@ -30,7 +33,6 @@ public class AdminDashboard {
     public void initializeAdminDashboard(JPanel panel) {
         System.out.println("Initializing Admin Dashboard");  // Debugging line
         JPanel adminPanel = new JPanel(new FlowLayout());  // Create a new JPanel with FlowLayout
-
 
         JButton manageServersButton = new JButton("Manage Servers");
         manageServersButton.addActionListener(e -> openManageServersPanel());
@@ -57,7 +59,13 @@ public class AdminDashboard {
 
     public void openManageServersPanel() {
         JFrame manageServersFrame = new JFrame("Manage Servers");
-        ManageServers manageServersPanel = new ManageServers(new ArrayList<>(this.servers));  // Explicitly cast to ArrayList
+        // Create a DefaultTableModel object
+        String[] columnNames = {"Server Name", "CPU Limit", "Memory Limit", "Network Limit"};
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        // Create a ServerManagement object with the tableModel
+        ServerManagement serverManagement = new ServerManagement(tableModel);
+        ManageServers manageServersPanel = new ManageServers(new ArrayList<>(this.servers), serverManagement);  // Pass it here
+        //ManageServers manageServersPanel = new ManageServers(new ArrayList<>(this.servers));  // Explicitly cast to ArrayList
         manageServersFrame.add(manageServersPanel);
         manageServersFrame.setSize(1000, 400);
         manageServersFrame.setVisible(true);

@@ -3,12 +3,12 @@ package main.java.ui;
 import main.java.main.Main;
 import main.java.models.AbstractUser;
 import main.java.models.Server;
-import main.java.models.ServerRestarter;
 import main.java.ui.AdminDashboard;
 import main.java.ui.UserDashboard;
 import main.java.utils.FileHandler;
 import main.java.utils.SMSHandler;
 import main.java.utils.UserDatabase;
+import main.java.ui.ServerManagement;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -17,7 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class DashboardPanel extends JPanel implements ServerRestarter {
+public class DashboardPanel extends JPanel {
     private JLabel welcomeLabel;
     private JTable serverTable;
     private JPanel parentPanel;
@@ -44,15 +44,16 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
 
         // Initialize ServerManagement with the tableModel
         this.serverManagement = new ServerManagement(this.tableModel);  // <-- This line should be here
+        this.servers = serverManagement.initializeServers();  // <-- Add this line here
 
         // Initialize UI Components
         initializeUI();
+        //System.out.println("Number of servers: " + servers.size());
     }
-
 
     private void initializeUI() {
         // Welcome Label
-        welcomeLabel = new JLabel("Welcome to the SMS-based Remote Server Monitoring System!");
+        welcomeLabel = new JLabel("Welcome to the SMS based Remote Server Monitoring System!");
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -62,18 +63,12 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
         gbc.insets = new Insets(10, 10, 10, 10);
         add(welcomeLabel, gbc);
 
-        servers = new ArrayList<>();
-
-        servers.add(new Server("Server1", 20, 50, 60));
-        servers.add(new Server("Server2", 20, 50, 70));
-        servers.add(new Server("Server3", 20, 50, 80));
-        servers.add(new Server("Server4", 20, 50, 88));
-        servers.add(new Server("Server5", 20, 50, 100));
-
+        /*
         if(servers == null || servers.isEmpty()) {
             System.out.println("Servers list is null or empty. Cannot proceed.");
             return; // Or handle this case as you see fit
         }
+        */
 
         // Initialize Table
         initializeTable();
@@ -107,12 +102,6 @@ public class DashboardPanel extends JPanel implements ServerRestarter {
         JScrollPane scrollPane = new JScrollPane(serverTable);
         scrollPane.setPreferredSize(new Dimension(500, 200));  // Optional: set JScrollPane size
         add(scrollPane, gbc);
-    }
-
-
-    @Override
-    public void restartServer(Server server) {
-        server.restart();
     }
 
     private void initializeTimer() {

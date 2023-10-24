@@ -1,6 +1,8 @@
 package main.java.ui;
 
 import main.java.models.Server;
+import main.java.ui.ServerManagement;
+import main.java.utils.FileHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -13,16 +15,17 @@ public class ManageServers extends JPanel {
     private JTable serverTable;
     private DefaultTableModel tableModel;
     private ArrayList<Server> servers;
+    private ServerManagement serverManagement;  // Added this line
 
-    public ManageServers(ArrayList<Server> servers) {
-        this.servers = servers; // Set the servers list
+    public ManageServers(ArrayList<Server> servers, ServerManagement serverManagement) {  // Added ServerManagement parameter
+        this.servers = servers;
+        this.serverManagement = serverManagement;  // Initialize the ServerManagement instance
+
         setLayout(new BorderLayout());
 
-        // Create a new table model for ManageServers
         String[] columnNames = {"Server Name", "CPU Limit", "Memory Limit", "Network Limit"};
         this.tableModel = new DefaultTableModel(columnNames, 0);
 
-        // Populate the table with existing servers
         for (Server server : this.servers) {
             Object[] rowData = {
                     server.getName(),
@@ -33,20 +36,16 @@ public class ManageServers extends JPanel {
             this.tableModel.addRow(rowData);
         }
 
-        // Create the JTable with the new table model
         serverTable = new JTable(this.tableModel);
 
-        // Create buttons for Add, Edit, and Remove
         JButton addButton = new JButton("Add");
         JButton editButton = new JButton("Edit");
         JButton removeButton = new JButton("Remove");
 
-        // Add action listeners to buttons
         addButton.addActionListener(new AddServerAction());
         editButton.addActionListener(new EditServerAction());
         removeButton.addActionListener(new RemoveServerAction());
 
-        // Layout components
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
@@ -81,6 +80,11 @@ public class ManageServers extends JPanel {
 
                 Object[] rowData = {name, cpuLimit, memoryLimit, networkLimit};
                 tableModel.addRow(rowData);
+                // Use ServerManagement's addServer method
+                serverManagement.addServer(name, cpuLimit, memoryLimit, networkLimit);
+                FileHandler.writeServersToCSVFile("servers.csv",servers);  // Save to CSV
+                populateServerTable();  // <-- Add this line
+
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Invalid input. Please enter numerical values for limits.");
             }
@@ -89,42 +93,62 @@ public class ManageServers extends JPanel {
 
 
     private class EditServerAction implements ActionListener {
+        private String validateInput(String prompt, String defaultValue) {
+            String input = JOptionPane.showInputDialog(prompt, defaultValue);
+            if (input == null || input.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Input cannot be empty. Please try again.");
+                return null; // or throw an exception, or use a default value
+            }
+            return input;
+        }
+
         @Override
         public void actionPerformed(ActionEvent e) {
-            int selectedRow = serverTable.getSelectedRow();
-            if (selectedRow != -1) {
-                Server serverToEdit = servers.get(selectedRow);
+            try {
+                int selectedRow = serverTable.getSelectedRow();
+                if (selectedRow >= 0 && selectedRow < servers.size()) {
+                    Server serverToEdit = servers.get(selectedRow);
 
-                String newName = JOptionPane.showInputDialog("Enter new Server Name:", serverToEdit.getName());
-                if (newName == null || newName.isEmpty()) return; // User cancelled or entered blank, exit the method
+                    String newName = validateInput("Enter new Server Name:", serverToEdit.getName());
+                    String newCpuLimitStr = validateInput("Enter new CPU Limit:", String.valueOf(serverToEdit.getCpuThreshold()));
+                    String newMemoryLimitStr = validateInput("Enter new Memory Limit:", String.valueOf(serverToEdit.getMemoryThreshold()));
+                    String newNetworkLimitStr = validateInput("Enter new Network Limit:", String.valueOf(serverToEdit.getNetworkThreshold()));
 
-                String newCpuLimitStr = JOptionPane.showInputDialog("Enter new CPU Limit:", serverToEdit.getCpuThreshold());
-                if (newCpuLimitStr == null) return; // User cancelled, exit the method
-
-                String newMemoryLimitStr = JOptionPane.showInputDialog("Enter new Memory Limit:", serverToEdit.getMemoryThreshold());
-                if (newMemoryLimitStr == null) return; // User cancelled, exit the method
-
-                String newNetworkLimitStr = JOptionPane.showInputDialog("Enter new Network Limit:", serverToEdit.getNetworkThreshold());
-                if (newNetworkLimitStr == null) return; // User cancelled, exit the method
-
-                try {
                     int newCpuLimit = Integer.parseInt(newCpuLimitStr);
                     int newMemoryLimit = Integer.parseInt(newMemoryLimitStr);
                     int newNetworkLimit = Integer.parseInt(newNetworkLimitStr);
 
                     serverToEdit.setName(newName);
-                    serverToEdit.setCpuUsage(newCpuLimit);  // Assuming you have a setter for this
-                    serverToEdit.setMemoryUsage(newMemoryLimit);  // Assuming you have a setter for this
-                    serverToEdit.setNetworkLatency(newNetworkLimit);  // Assuming you have a setter for this
+                    serverToEdit.setCpuThreshold(newCpuLimit);  // Assuming you have a setter for this
+                    serverToEdit.setMemoryThreshold(newMemoryLimit);  // Assuming you have a setter for this
+                    serverToEdit.setNetworkThreshold(newNetworkLimit);  // Assuming you have a setter for this
 
-                    tableModel.setValueAt(newName, selectedRow, 0);
-                    tableModel.setValueAt(newCpuLimit, selectedRow, 1);
-                    tableModel.setValueAt(newMemoryLimit, selectedRow, 2);
-                    tableModel.setValueAt(newNetworkLimit, selectedRow, 3);
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Invalid input. Please enter numerical values for limits.");
+                    populateServerTable();  // Refresh the table
+                    FileHandler.writeServersToCSVFile("servers.csv", servers);  // Save to CSV
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please select a server to edit.");
                 }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Invalid input. Please enter numerical values for limits.");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "An unexpected error occurred. Please try again.");
             }
+        }
+    }
+
+
+    // New method to populate the server table
+    private void populateServerTable() {
+        tableModel.setRowCount(0);
+        for (Server server : this.servers) {
+            Object[] rowData = {
+                    server.getName(),
+                    server.getCpuThreshold(),
+                    server.getMemoryThreshold(),
+                    server.getNetworkThreshold()
+            };
+            tableModel.addRow(rowData);
         }
     }
 
@@ -132,10 +156,17 @@ public class ManageServers extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             int selectedRow = serverTable.getSelectedRow();
-            if (selectedRow != -1) {
+            if (selectedRow >= 0 && selectedRow < servers.size()) {
                 servers.remove(selectedRow);
-                tableModel.removeRow(selectedRow);
+
+                // Update the CSV file
+                FileHandler.writeServersToCSVFile("servers.csv", servers);  // Save to CSV
+                populateServerTable();  // <-- Add this line
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Please select a server to remove.");
             }
         }
     }
+
 }

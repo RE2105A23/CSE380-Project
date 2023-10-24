@@ -1,12 +1,8 @@
 package main.java.ui;
 
-import main.java.models.AbstractUser;
 import main.java.models.Server;
-import main.java.models.ServerRestarter;
-import main.java.models.User;
 import main.java.utils.FileHandler;
 import main.java.utils.SMSHandler;
-import main.java.utils.UserDatabase;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -15,7 +11,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.File;
+
 
 public class ServerManagement {
     private ArrayList<Server> servers;
@@ -27,16 +29,8 @@ public class ServerManagement {
             System.err.println("tableModel is null. Aborting simulation.");
             return;
         }
-        initializeServers();
-    }
+        this.servers = initializeServers();  // <-- Add this line here
 
-    public void initializeServers() {
-        servers = new ArrayList<>();
-        servers.add(new Server("Server1", 20, 50, 60));
-        servers.add(new Server("Server2", 20, 50, 70));
-        servers.add(new Server("Server3", 20, 50, 80));
-        servers.add(new Server("Server4", 20, 50, 88));
-        servers.add(new Server("Server5", 20, 50, 100));
     }
 
     public void simulateServerMonitoring() {
@@ -73,7 +67,6 @@ public class ServerManagement {
         tableModel.fireTableDataChanged();
     }
 
-
     public void restartServer(Server server) {
         server.restart();
     }
@@ -104,16 +97,6 @@ public class ServerManagement {
             tableModel.fireTableDataChanged();
         } else {
             JOptionPane.showMessageDialog(null, "Invalid row selected for editing.");
-        }
-    }
-
-    public void removeServer(int selectedRow) {
-        if (selectedRow >= 0 && selectedRow < servers.size()) {
-            servers.remove(selectedRow);
-            tableModel.removeRow(selectedRow);
-            tableModel.fireTableDataChanged();
-        } else {
-            JOptionPane.showMessageDialog(null, "Invalid row selected for removal.");
         }
     }
 
@@ -164,4 +147,9 @@ public class ServerManagement {
             fireEditingStopped();
         }
     }
+
+    public ArrayList<Server> initializeServers() {
+        return new ArrayList<>(FileHandler.readServersFromCSVFile("servers.csv"));
+    }
+
 }

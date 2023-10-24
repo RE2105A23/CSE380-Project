@@ -14,7 +14,7 @@ public class Main {
     }
 
     public static void createAndShowGUI() {
-        JFrame frame = new JFrame("Smart SMS");
+        JFrame frame = new JFrame("Smart Server Management System");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1200, 600);
 

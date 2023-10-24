@@ -3,6 +3,7 @@ package main.java.utils;
 import main.java.models.AbstractUser;
 import main.java.models.Admin;
 import main.java.models.User;
+import main.java.models.Server;
 
 import javax.swing.JOptionPane;
 import java.io.*;
@@ -152,6 +153,64 @@ public class FileHandler {
             writer.write(formatUser(newUser));
         } catch (IOException e) {
             handleException("Error appending user to file", e);
+        }
+    }
+
+    // Write servers to a CSV file
+    public static void writeServersToCSVFile(String filename, ArrayList<Server> servers) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            // Write the header
+            //writer.write("Server Name,CPU Limit,Memory Limit,Network Limit");
+            writer.newLine();
+
+            // Write the server data
+            for (Server server : servers) {
+                writer.write(server.getName() + "," + server.getCpuThreshold() + "," + server.getMemoryThreshold() + "," + server.getNetworkThreshold());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            handleException("Error writing servers to CSV file", e);
+        }
+    }
+
+    // Read servers from a CSV file
+    public static List<Server> readServersFromCSVFile(String filename) {
+        List<Server> servers = new ArrayList<>();
+        File file = new File(filename);
+        if (!file.exists()) {
+            handleException(filename + " not found. Creating an empty file.", null);
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                handleException("Error creating new file " + filename, e);
+            }
+            return servers;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                addServerFromLine(line, servers);
+            }
+        } catch (IOException e) {
+            handleException("Error reading servers from CSV file", e);
+        }
+        return servers;
+    }
+
+    private static String formatServer(Server server) {
+        return server.getName() + "," + server.getCpuThreshold() + "," + server.getMemoryThreshold() + "," + server.getNetworkThreshold();
+    }
+
+    private static void addServerFromLine(String line, List<Server> servers) {
+        String[] parts = line.split(",");
+        if (parts.length >= 4) {
+            String name = parts[0];
+            int cpuThreshold = Integer.parseInt(parts[1]);
+            int memoryThreshold = Integer.parseInt(parts[2]);
+            int networkThreshold = Integer.parseInt(parts[3]);
+            Server server = new Server(name, cpuThreshold, memoryThreshold, networkThreshold);
+            servers.add(server);
         }
     }
 

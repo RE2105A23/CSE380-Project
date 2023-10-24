@@ -3,6 +3,8 @@ package main.java.ui;
 import main.java.models.Server;
 import javax.swing.*;
 import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class AlertManagement {
     private ArrayList<Server> servers;
@@ -30,14 +32,14 @@ public class AlertManagement {
     }
 
     public JPanel createSubscriptionPanel() {
-        JComboBox<String> serverDropdown = createServerDropdown();
-        JComboBox<String> alertTypeDropdown = createAlertTypeDropdown();
+        this.serverDropdown = createServerDropdown();  // Use 'this' to refer to the class-level variable
+        this.alertTypeDropdown = createAlertTypeDropdown();  // Use 'this' to refer to the class-level variable
 
         JPanel panel = new JPanel();
         panel.add(new JLabel("Select Server:"));
-        panel.add(serverDropdown);
+        panel.add(this.serverDropdown);  // Use 'this' to refer to the class-level variable
         panel.add(new JLabel("Select Alert Type:"));
-        panel.add(alertTypeDropdown);
+        panel.add(this.alertTypeDropdown);  // Use 'this' to refer to the class-level variable
 
         return panel;
     }
@@ -78,16 +80,27 @@ public class AlertManagement {
         }
 
         if ("All Servers".equals(selectedServerName)) {
-            if ("All Alerts".equals(selectedAlertType)) {
-                subscribeAllServersToAllAlerts();
-            } else {
-                subscribeAllServers(selectedAlertType);
+            for (Server server : servers) {
+                if ("All Alerts".equals(selectedAlertType)) {
+                    server.subscribeToAlert("CPU Usage");
+                    server.subscribeToAlert("Memory Usage");
+                    server.subscribeToAlert("Network Latency");
+                } else {
+                    server.subscribeToAlert(selectedAlertType);
+                }
             }
         } else {
-            if ("All Alerts".equals(selectedAlertType)) {
-                subscribeSpecificServerToAllAlerts(selectedServerName);
-            } else {
-                subscribeSpecificServer(selectedServerName, selectedAlertType);
+            for (Server server : servers) {
+                if (server.getName().equals(selectedServerName)) {
+                    if ("All Alerts".equals(selectedAlertType)) {
+                        server.subscribeToAlert("CPU Usage");
+                        server.subscribeToAlert("Memory Usage");
+                        server.subscribeToAlert("Network Latency");
+                    } else {
+                        server.subscribeToAlert(selectedAlertType);
+                    }
+                    break;
+                }
             }
         }
     }

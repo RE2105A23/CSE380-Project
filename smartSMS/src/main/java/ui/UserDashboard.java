@@ -2,15 +2,15 @@ package main.java.ui;
 
 import main.java.models.Server;
 import main.java.models.AbstractUser;
-import main.java.ui.AlertManagement;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusAdapter;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class UserDashboard extends JPanel {
     private JLabel welcomeLabel;
@@ -24,6 +24,7 @@ public class UserDashboard extends JPanel {
     private ArrayList<AbstractUser> users;
     private JPanel parentPanel;
     private DashboardPanel dashboardPanel;
+    private Server selectedServer = null;
 
     public UserDashboard(ArrayList<Server> servers, ArrayList<AbstractUser> users, GridBagConstraints gbc, JPanel parentPanel, DashboardPanel dashboardPanel) {
         if(servers == null) {
@@ -43,13 +44,6 @@ public class UserDashboard extends JPanel {
         serverTable.setFocusable(true);
         serverTable.setRowSelectionAllowed(true);
 
-        serverTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-            public void valueChanged(ListSelectionEvent event) {
-                System.out.println("Row changed to: " + serverTable.getSelectedRow());
-            }
-        });
-
-
         for (Server server : servers) {
             Object[] rowData = {server.getName(), server.getCpuUsage(), server.getMemoryUsage(), server.getNetworkLatency()};
             tableModel.addRow(rowData);
@@ -61,10 +55,27 @@ public class UserDashboard extends JPanel {
         gbc.weighty = 0.1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         this.add(scrollPane, gbc);
+
+        // Debug: Check if table model is populated correctly
+        //System.out.println("Debug: Table model row count: " + tableModel.getRowCount());
+
+        // Focus Debugging
+        serverTable.addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent e) {
+                System.out.println("Table gained focus");
+            }
+            public void focusLost(FocusEvent e) {
+                System.out.println("Table lost focus");
+            }
+        });
     }
 
     public void initializeUserDashboard(DashboardPanel dashboardPanel) {
         System.out.println("Initializing User Dashboard");
+
+        // Debug: Check if table model is populated correctly now
+        //System.out.println("Debug: Table model row count: " + tableModel.getRowCount());
+
         this.dashboardPanel = dashboardPanel;
 
         JPanel userPanel = new JPanel(new FlowLayout());
@@ -72,6 +83,7 @@ public class UserDashboard extends JPanel {
         this.alertManagement = new AlertManagement(servers);
         alertManagement.updateDropdowns();
 
+        // Initialize the Request Restart Button with the new ActionListener
         initializeRequestRestartButton(userPanel);
         initializeSubscribeAlertsButton(userPanel);
 
@@ -83,35 +95,71 @@ public class UserDashboard extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         parentPanel.add(userPanel, gbc);
-        System.out.println("Table Row Count: " + serverTable.getRowCount());
+        //System.out.println("Table Row Count: " + serverTable.getRowCount());
     }
+
+    // Inside initializeRequestRestartButton method
 
     public void initializeRequestRestartButton(JPanel userPanel) {
         JButton requestRestartButton = new JButton("Request Server Restart");
-        requestRestartButton.addActionListener(e -> {
-            SwingUtilities.invokeLater(() -> {
-                serverTable.requestFocus();  // Explicitly request focus for the table
-                serverTable.repaint();  // Repaint the table
-                int selectedRow = serverTable.getSelectedRow();
-                System.out.println("Selected Row: " + selectedRow);
-
-                // Debugging: Print the state of the table's selection model
-                ListSelectionModel selectionModel = serverTable.getSelectionModel();
-                System.out.println("Is selection empty: " + selectionModel.isSelectionEmpty());
-
-                if (selectedRow != -1) {
-                    Server selectedServer = servers.get(selectedRow);
-                    if (selectedServer != null) {
-                        requestServerRestart(selectedServer);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Invalid server selected.");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(this, "Please select a server to restart.");
-                }
-            });
-        });
         userPanel.add(requestRestartButton);
+
+        requestRestartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                JDialog serverSelectDialog = new JDialog();
+                serverSelectDialog.setTitle("Select Server to Restart");
+                serverSelectDialog.setLayout(new GridBagLayout());
+                GridBagConstraints gbc = new GridBagConstraints();
+
+                JComboBox<Object> serverDropdown = new JComboBox<>();
+                serverDropdown.addItem("All Servers");
+                for (Server server : servers) {
+                    serverDropdown.addItem(server);
+                }
+
+                JButton submitButton = new JButton("Submit");
+                submitButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        Object selected = serverDropdown.getSelectedItem();
+                        if ("All Servers".equals(selected)) {
+                            for (Server server : servers) {
+                                requestServerRestart(server);
+                            }
+                        } else {
+                            Server selectedServer = (Server) selected;
+                            if (selectedServer != null) {
+                                requestServerRestart(selectedServer);
+                            }
+                        }
+                        serverSelectDialog.dispose();
+                    }
+                });
+
+                gbc.insets = new Insets(10, 10, 10, 10);  // Padding
+
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.anchor = GridBagConstraints.WEST;
+                serverSelectDialog.add(new JLabel("Select Server:"), gbc);
+
+                gbc.gridx = 1;
+                serverSelectDialog.add(serverDropdown, gbc);
+
+                gbc.gridx = 2;
+                gbc.gridy = 0;  // Changed from 1 to 2 to add more space
+                gbc.gridwidth = 1;
+                gbc.anchor = GridBagConstraints.EAST;
+                serverSelectDialog.add(submitButton, gbc);
+
+                serverSelectDialog.setPreferredSize(new Dimension(400, 150));  // Set the preferred size
+                serverSelectDialog.pack();
+                serverSelectDialog.setLocationRelativeTo(null);  // Center the dialog on the screen
+                serverSelectDialog.setVisible(true);
+            }
+        });
     }
 
     public void initializeSubscribeAlertsButton(JPanel userPanel) {
@@ -132,12 +180,12 @@ public class UserDashboard extends JPanel {
 
     private void requestServerRestart(Server serverToRestart) {
         int dialogResult = JOptionPane.showConfirmDialog(this,
-                "Do you want to restart " + serverToRestart.getName() + "?",
-                "Confirm Restart",
+                "Do you want to submit restart for " + serverToRestart.getName() + "?",
+                "Confirm Request",
                 JOptionPane.YES_NO_OPTION);
 
         if (dialogResult == JOptionPane.YES_OPTION) {
-            serverToRestart.restart();
+            //serverToRestart.restart();
             sendRestartRequestToAdmin(serverToRestart);
         }
     }
