@@ -16,8 +16,10 @@ public class ManageServers extends JPanel {
     private DefaultTableModel tableModel;
     private ArrayList<Server> servers;
     private ServerManagement serverManagement;  // Added this line
+    private AdminDashboard adminDashboard;  // Declare the field
 
-    public ManageServers(ArrayList<Server> servers, ServerManagement serverManagement) {  // Added ServerManagement parameter
+    public ManageServers(ArrayList<Server> servers, ServerManagement serverManagement, AdminDashboard adminDashboard) {  // Added ServerManagement parameter
+    this.adminDashboard = adminDashboard;  // Initialize the AdminDashboard instance
         this.servers = servers;
         this.serverManagement = serverManagement;  // Initialize the ServerManagement instance
 
@@ -84,6 +86,8 @@ public class ManageServers extends JPanel {
                 serverManagement.addServer(name, cpuLimit, memoryLimit, networkLimit);
                 FileHandler.writeServersToCSVFile("servers.csv",servers);  // Save to CSV
                 populateServerTable();  // <-- Add this line
+                // Refresh the AdminDashboard table
+                adminDashboard.refreshTable();
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Invalid input. Please enter numerical values for limits.");
@@ -123,8 +127,9 @@ public class ManageServers extends JPanel {
                     serverToEdit.setMemoryThreshold(newMemoryLimit);  // Assuming you have a setter for this
                     serverToEdit.setNetworkThreshold(newNetworkLimit);  // Assuming you have a setter for this
 
-                    populateServerTable();  // Refresh the table
                     FileHandler.writeServersToCSVFile("servers.csv", servers);  // Save to CSV
+                    populateServerTable();  // Refresh the table
+                    adminDashboard.refreshTable();
 
                 } else {
                     JOptionPane.showMessageDialog(null, "Please select a server to edit.");
@@ -162,11 +167,11 @@ public class ManageServers extends JPanel {
                 // Update the CSV file
                 FileHandler.writeServersToCSVFile("servers.csv", servers);  // Save to CSV
                 populateServerTable();  // <-- Add this line
+                adminDashboard.refreshTable();
 
             } else {
                 JOptionPane.showMessageDialog(null, "Please select a server to remove.");
             }
         }
     }
-
 }

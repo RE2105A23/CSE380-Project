@@ -40,16 +40,40 @@ public class DashboardPanel extends JPanel {
         } else {
             columnNames = new String[]{"Server Name", "CPU Usage", "Memory Usage", "Network Latency"};
         }
-        this.tableModel = new DefaultTableModel(columnNames, 0);
 
-        // Initialize ServerManagement with the tableModel
-        this.serverManagement = new ServerManagement(this.tableModel);  // <-- This line should be here
-        this.servers = serverManagement.initializeServers();  // <-- Add this line here
+        // Initialize tableModel and servers
+        this.tableModel = new DefaultTableModel(columnNames, 0);
+        this.servers = new ArrayList<>();
+
+        // Initialize ServerManagement with the tableModel and servers
+        if (this.tableModel != null) {
+            this.serverManagement = new ServerManagement(this.servers, this.tableModel);  // Make sure to initialize here
+            if (this.serverManagement != null) {
+                this.servers = serverManagement.initializeServers();  // Assuming initializeServers is a method in ServerManagement
+            } else {
+                System.err.println("serverManagement is null. Aborting.");
+                return;
+            }
+        } else {
+            System.err.println("tableModel is null. Cannot initialize serverManagement.");
+            return;
+        }
+
+        //this.servers = initializeServers();
+        if (this.servers == null) {
+            System.err.println("servers is null. Aborting.");
+            return;  // Exit if servers is null
+        }
 
         // Initialize UI Components
         initializeUI();
-        //System.out.println("Number of servers: " + servers.size());
+
+        // Initialize ServerManagement with the tableModel and servers
+        this.serverManagement = new ServerManagement(this.servers, this.tableModel);
+        //System.out.println("Dashboard Server object: "+servers.size());
     }
+
+
 
     private void initializeUI() {
         // Welcome Label
@@ -62,13 +86,6 @@ public class DashboardPanel extends JPanel {
         gbc.weighty = 0.1;
         gbc.insets = new Insets(10, 10, 10, 10);
         add(welcomeLabel, gbc);
-
-        /*
-        if(servers == null || servers.isEmpty()) {
-            System.out.println("Servers list is null or empty. Cannot proceed.");
-            return; // Or handle this case as you see fit
-        }
-        */
 
         // Initialize Table
         initializeTable();
@@ -83,7 +100,7 @@ public class DashboardPanel extends JPanel {
         initializeLogoutButton();
 
         // Populate the table initially
-        serverManagement.simulateServerMonitoring();
+        serverManagement.simulateServerMonitoring(servers);
     }
 
     private void initializeTable() {
@@ -108,7 +125,7 @@ public class DashboardPanel extends JPanel {
         Timer timer = new Timer(5000, e -> {
             //System.out.println("Timer is called");  // Debug print
             tableModel.setRowCount(0);
-            serverManagement.simulateServerMonitoring();
+            serverManagement.simulateServerMonitoring(servers);
         });
         timer.start();
     }
@@ -116,7 +133,8 @@ public class DashboardPanel extends JPanel {
     private void initializeDashboard() {
         if (currentUser != null) {
             if ("admin".equals(currentUser.getRole())) {
-                AdminDashboard adminDashboard = new AdminDashboard(servers, users, gbc, this, this);
+                DefaultTableModel tableModel = new DefaultTableModel();  // Initialize this as needed
+                AdminDashboard adminDashboard = new AdminDashboard(servers, users, gbc, this, this,tableModel);
                 adminDashboard.initializeAdminDashboard(this);
             } else {
                 UserDashboard userDashboard = new UserDashboard(servers, users, gbc, this, this);
@@ -135,4 +153,11 @@ public class DashboardPanel extends JPanel {
         });
         add(logoutButton);
     }
+
+    public void refreshServers() {
+        this.servers = serverManagement.initializeServers(); // Re-initialize servers
+        tableModel.setRowCount(0); // Clear the table
+        serverManagement.simulateServerMonitoring(servers);
+    }
+
 }

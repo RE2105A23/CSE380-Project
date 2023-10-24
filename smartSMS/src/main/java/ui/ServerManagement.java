@@ -23,22 +23,25 @@ public class ServerManagement {
     private ArrayList<Server> servers;
     private DefaultTableModel tableModel;
 
-    public ServerManagement(DefaultTableModel tableModel) {
+    public ServerManagement(ArrayList<Server> servers, DefaultTableModel tableModel) {
+        this.servers = servers;
         this.tableModel = tableModel;
+        //System.out.println("Server object 1: "+servers.size());
         if (tableModel == null) {
             System.err.println("tableModel is null. Aborting simulation.");
             return;
         }
-        this.servers = initializeServers();  // <-- Add this line here
-
+        //this.servers = initializeServers();  // <-- Add this line here
+        //System.out.println("Server object 2: "+servers.size());
     }
 
-    public void simulateServerMonitoring() {
-        tableModel.setRowCount(0);
-        if (tableModel == null) {
-            System.err.println("tableModel is null. Aborting simulation.");
+    public void simulateServerMonitoring(ArrayList<Server> servers) {
+        this.servers = servers;
+        if (servers == null || tableModel == null) {
+            System.err.println("Either servers or tableModel is null. Aborting simulation.");
             return;
         }
+        tableModel.setRowCount(0);
 
         for (Server server : servers) {
             server.simulateMonitoring();
@@ -151,5 +154,6 @@ public class ServerManagement {
     public ArrayList<Server> initializeServers() {
         return new ArrayList<>(FileHandler.readServersFromCSVFile("servers.csv"));
     }
+
 
 }

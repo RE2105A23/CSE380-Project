@@ -14,19 +14,23 @@ import javax.swing.table.DefaultTableModel;
 
 
 public class AdminDashboard {
-    private List<Server> servers;
+    private ArrayList<Server> servers;
     private List<AbstractUser> users;
     private GridBagConstraints gbc;
     private JPanel parentPanel;  // Add this line
     private DashboardPanel dashboardPanel;  // Add this line to declare the field
+    private DefaultTableModel tableModel;  // Add this line to declare the field
 
-    public AdminDashboard(List<Server> servers, List<AbstractUser> users, GridBagConstraints gbc, JPanel parentPanel, DashboardPanel dashboardPanel) {
+    public AdminDashboard(ArrayList<Server> servers, List<AbstractUser> users, GridBagConstraints gbc, JPanel parentPanel, DashboardPanel dashboardPanel, DefaultTableModel tableModel) {
         //System.out.println("Number of servers in AdminDashboard: " + servers.size());  // Debug line
         this.servers = servers;
         this.users = users;
         this.gbc = gbc;
         this.parentPanel = parentPanel;  // Initialize the JPanel
         this.dashboardPanel = dashboardPanel;  // Initialize the DashboardPanel field
+        this.tableModel = tableModel;  // Initialize the DefaultTableModel field
+
+        //System.out.println("AdminDashboard Server object: "+servers.size());
 
     }
 
@@ -63,13 +67,19 @@ public class AdminDashboard {
         String[] columnNames = {"Server Name", "CPU Limit", "Memory Limit", "Network Limit"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         // Create a ServerManagement object with the tableModel
-        ServerManagement serverManagement = new ServerManagement(tableModel);
-        ManageServers manageServersPanel = new ManageServers(new ArrayList<>(this.servers), serverManagement);  // Pass it here
+        ServerManagement serverManagement = new ServerManagement(servers,tableModel);
+        ManageServers manageServersPanel = new ManageServers(new ArrayList<>(this.servers), serverManagement,this);  // Pass it here
         //ManageServers manageServersPanel = new ManageServers(new ArrayList<>(this.servers));  // Explicitly cast to ArrayList
         manageServersFrame.add(manageServersPanel);
         manageServersFrame.setSize(1000, 400);
         manageServersFrame.setVisible(true);
         manageServersFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        manageServersFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                refreshTable();  // Refresh the table when the ManageServers window is closed
+            }
+        });
     }
 
     public void openManageUsersPanel() {
@@ -141,6 +151,41 @@ public class AdminDashboard {
                     }
                 }
             }
+        }
+    }
+
+    // Method inside AdminDashboard to refresh its table
+    /*
+    public void refreshTable() {
+        // Assuming tableModel is the DefaultTableModel of your JTable in AdminDashboard
+        tableModel.setRowCount(0); // Clear the table
+        for (Server server : this.servers) {
+            Object[] rowData = {
+                    server.getName(),
+                    server.getCpuThreshold(),
+                    server.getMemoryThreshold(),
+                    server.getNetworkThreshold()
+            };
+            tableModel.addRow(rowData); // Add new row
+        }
+    }
+    */
+
+    public void refreshTable() {
+        dashboardPanel.refreshServers();
+    }
+
+    public void populateTableFromCSV(String csvFilePath) {
+        // Clear the table
+        tableModel.setRowCount(0);
+
+        // Read servers from the CSV file
+        List<Server> serversFromCSV = FileHandler.readServersFromCSVFile(csvFilePath);
+
+        // Repopulate the table
+        for (Server server : serversFromCSV) {
+            Object[] rowData = {server.getName(), server.getCpuThreshold(), server.getMemoryThreshold(), server.getNetworkThreshold()};
+            tableModel.addRow(rowData);
         }
     }
 }
