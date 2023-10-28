@@ -1,10 +1,9 @@
 package main.java.ui;
 
 import main.java.models.Server;
+
 import javax.swing.*;
 import java.util.ArrayList;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class AlertManagement {
     private ArrayList<Server> servers;

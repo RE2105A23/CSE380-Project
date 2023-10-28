@@ -1,5 +1,8 @@
 package main.java.ui;
 
+import main.java.models.AbstractUser;
+import main.java.utils.UserDatabase;
+import main.java.utils.FileHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,11 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.List;
-import main.java.models.AbstractUser;
-import main.java.models.Admin;
-import main.java.models.User;
-import main.java.utils.UserDatabase;
-import main.java.utils.FileHandler;
 
 public class LoginPanel extends JPanel {
     private JLabel welcomeLabel;

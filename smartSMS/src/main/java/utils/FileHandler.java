@@ -5,7 +5,6 @@ import main.java.models.Admin;
 import main.java.models.User;
 import main.java.models.Server;
 
-import javax.swing.JOptionPane;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -213,6 +212,4 @@ public class FileHandler {
             servers.add(server);
         }
     }
-
-
 }

@@ -1,7 +1,6 @@
 package main.java.ui;
 
 import main.java.models.Server;
-import main.java.ui.ServerManagement;
 import main.java.utils.FileHandler;
 
 import javax.swing.*;
@@ -19,9 +18,9 @@ public class ManageServers extends JPanel {
     private AdminDashboard adminDashboard;  // Declare the field
 
     public ManageServers(ArrayList<Server> servers, ServerManagement serverManagement, AdminDashboard adminDashboard) {  // Added ServerManagement parameter
-    this.adminDashboard = adminDashboard;  // Initialize the AdminDashboard instance
         this.servers = servers;
         this.serverManagement = serverManagement;  // Initialize the ServerManagement instance
+        this.adminDashboard = adminDashboard;  // Initialize the AdminDashboard instance
 
         setLayout(new BorderLayout());
 
@@ -77,13 +76,14 @@ public class ManageServers extends JPanel {
                 int memoryLimit = Integer.parseInt(memoryLimitStr);
                 int networkLimit = Integer.parseInt(networkLimitStr);
 
-                Server newServer = new Server(name, cpuLimit, memoryLimit, networkLimit);
-                servers.add(newServer);
+                //Server newServer = new Server(name, cpuLimit, memoryLimit, networkLimit);
+                //servers.add(newServer);
 
                 Object[] rowData = {name, cpuLimit, memoryLimit, networkLimit};
                 tableModel.addRow(rowData);
                 // Use ServerManagement's addServer method
                 serverManagement.addServer(name, cpuLimit, memoryLimit, networkLimit);
+
                 FileHandler.writeServersToCSVFile("servers.csv",servers);  // Save to CSV
                 populateServerTable();  // <-- Add this line
                 // Refresh the AdminDashboard table
@@ -168,6 +168,8 @@ public class ManageServers extends JPanel {
                 FileHandler.writeServersToCSVFile("servers.csv", servers);  // Save to CSV
                 populateServerTable();  // <-- Add this line
                 adminDashboard.refreshTable();
+
+                //System.out.println("Servers after deletion: " + servers);  // Debugging line
 
             } else {
                 JOptionPane.showMessageDialog(null, "Please select a server to remove.");
